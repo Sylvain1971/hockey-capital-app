@@ -451,7 +451,7 @@ export default function HockeyCapital() {
               </div>
               <div style={{ textAlign: 'center', marginTop: 12, fontSize: 12, color: 'var(--color-text-secondary)', cursor: 'pointer' }}
                 onClick={() => setAuthModal(authModal === 'login' ? 'register' : 'login')}>
-                {authModal === 'login' ? 'Pas de compte? S'inscrire' : 'Déjà un compte? Se connecter'}
+                {authModal === 'login' ? "Pas de compte? S'inscrire" : "Déjà un compte? Se connecter"}
               </div>
             </form>
           </div>
