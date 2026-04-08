@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useState } from 'react';
 
 const S = {
@@ -45,7 +45,7 @@ function StepDots({ current }) {
 // ---- Étape 1: Infos de base ----
 function Step1({ d, set }) {
   return <>
-    <div style={S.info}>Configurez votre ligue -- les joueurs rejoindront via un code ou invitation email.</div>
+    <div style={S.info}>Configurez votre ligue - les joueurs rejoindront via un code ou invitation email.</div>
     <div style={S.mb}>
       <label style={S.lbl}>Nom de la ligue *</label>
       <input style={S.inp} placeholder="Ex: Pool Hockey 2026" value={d.name} onChange={e => set('name', e.target.value)} />
@@ -70,8 +70,8 @@ function Step1({ d, set }) {
     <div style={S.mb}>
       <label style={S.lbl}>Mode de draft</label>
       <select style={S.sel} value={d.draft} onChange={e => set('draft', e.target.value)}>
-        <option value="libre">Libre -- chacun achète ses équipes</option>
-        <option value="serpentin">Serpentin -- ordre alterné</option>
+        <option value="libre">Libre - chacun achète ses équipes</option>
+        <option value="serpentin">Serpentin - ordre alterné</option>
       </select>
     </div>
     <div style={S.mb}>
@@ -178,7 +178,7 @@ function Step4({ d, set }) {
     const e = emailInput.trim().toLowerCase();
     if (!e.includes('@')) { setErr('Email invalide'); return; }
     if ((d.emails || []).includes(e)) { setErr('Déjà ajouté'); return; }
-    if ((d.emails || []).length >= d.players - 1 && d.players > 1) { setErr('Maximum ' + (d.players - 1) + ' invités (vous êtes le créateur)'); return; }
+    if ((d.emails || []).length >= d.players - 1) { setErr(`Maximum ${d.players - 1} invités (vous êtes le créateur)`); return; }
     set('emails', [...(d.emails || []), e]);
     setEmailInput('');
     setErr('');
@@ -187,10 +187,9 @@ function Step4({ d, set }) {
   function removeEmail(e) { set('emails', (d.emails || []).filter(x => x !== e)); }
 
   return <>
-    <div style={S.info}>{d.players === 1 ? 'HC Ligue solo -- vous jouez seul contre le marché! Aucun invité requis.' : 'Invitez vos joueurs par email. Ils recevront le code de la ligue.'}</div>
-    {d.players > 1 && <>
-      <div style={S.mb}>
-        <label style={S.lbl}>Ajouter un joueur par email</label>
+    <div style={S.info}>Invitez vos joueurs par email. Ils recevront le code de la ligue et pourront s'inscrire et rejoindre directement.</div>
+    <div style={S.mb}>
+      <label style={S.lbl}>Ajouter un joueur par email</label>
       <div style={{ display:'flex', gap:8 }}>
         <input style={{ ...S.inp, marginBottom:0 }} placeholder="joueur@email.com" value={emailInput}
           onChange={e => setEmailInput(e.target.value)}
@@ -202,14 +201,14 @@ function Step4({ d, set }) {
     <div style={{ marginBottom:16 }}>
       <div style={{ fontSize:13, color:'#888', marginBottom:8 }}>{(d.emails || []).length}/{d.players - 1} invités ajoutés</div>
       {(d.emails || []).length === 0
-        ? <div style={{ fontSize:13, color:'#aaa', fontStyle:'italic' }}>Aucun invité -- vous pouvez aussi partager le code manuellement après création.</div>
+        ? <div style={{ fontSize:13, color:'#aaa', fontStyle:'italic' }}>Aucun invité - vous pouvez aussi partager le code manuellement après création.</div>
         : (d.emails || []).map(e => (
           <span key={e} style={S.chip}>{e} <span style={S.chipX} onClick={() => removeEmail(e)}>×</span></span>
         ))
       }
     </div>
     <div style={{ background:'#fffbf0', border:'1px solid #f0d080', borderRadius:10, padding:'10px 14px', fontSize:13, color:'#7a5800' }}>
-      Les joueurs invités pourront s'inscrire avec leur email et rejoindre automatiquement votre ligue.
+       Les joueurs invités pourront s'inscrire avec leur email et rejoindre automatiquement votre ligue.
     </div>
   </>;
 }
@@ -226,7 +225,7 @@ function Step5({ d, result }) {
         {(d.emails || []).length > 0 && `Invitations envoyées à ${(d.emails || []).length} joueur(s).`}
       </div>
       <div style={{ fontSize:13, color:'#555', marginTop:12 }}>
-        Lien: <strong>hockey-capital-app.vercel.app</strong> => Rejoindre avec le code
+        Lien: <strong>hockey-capital-app.vercel.app</strong> > Rejoindre avec le code
       </div>
     </div>
   );
@@ -324,9 +323,9 @@ export default function LeagueWizard({ onClose, token }) {
                   <button style={{ ...S.btn, opacity: canNext() ? 1 : 0.5 }}
                     disabled={!canNext()}
                     onClick={() => step === 3 ? submit() : setStep(s => s + 1)}>
-                    {loading ? 'Création...' : step === 3 ? 'Créer la ligue HC' : 'Suivant =>'}
+                    {loading ? 'Création...' : step === 3 ? 'Créer la ligue HC' : 'Suivant >'}
                   </button>
-                  {step > 0 && <button style={S.btnSec} onClick={() => setStep(s => s - 1)}>Retour Retour</button>}
+                  {step > 0 && <button style={S.btnSec} onClick={() => setStep(s => s - 1)}>< Retour</button>}
                 </>
               ) : null}
             </div>

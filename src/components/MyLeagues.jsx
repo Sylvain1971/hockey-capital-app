@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useState, useEffect } from 'react';
 
 const S = {
@@ -118,10 +118,10 @@ export default function MyLeagues({ onClose, token, onCreateNew, onOpenLeague })
                     </div>
                     <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
                       <button style={S.btnOpen} onClick={() => handleOpenLeague(lg)}>
-                        => Ouvrir la ligue
+                        > Ouvrir la ligue
                       </button>
                       <button style={S.btnCopy} onClick={() => { navigator.clipboard?.writeText(lg.invite_code); setMsg('Code copié!'); setTimeout(() => setMsg(''), 2000); }}>
-                        Code {lg.invite_code}
+                         {lg.invite_code}
                       </button>
                       {lg.is_creator && (
                         confirmDelete === lg.id
@@ -130,7 +130,7 @@ export default function MyLeagues({ onClose, token, onCreateNew, onOpenLeague })
                               <button style={{ ...S.btnDanger, background:'#e74c3c', color:'#fff' }} onClick={() => deleteLeague(lg.id)}>Oui</button>
                               <button style={S.btnCopy} onClick={() => setConfirmDelete(null)}>Non</button>
                             </div>
-                          : <button style={S.btnDanger} onClick={() => setConfirmDelete(lg.id)}>Suppr. Supprimer</button>
+                          : <button style={S.btnDanger} onClick={() => setConfirmDelete(lg.id)}>Suppr Supprimer</button>
                       )}
                     </div>
                   </div>
