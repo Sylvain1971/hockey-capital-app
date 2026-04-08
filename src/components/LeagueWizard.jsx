@@ -209,7 +209,7 @@ function Step4({ d, set }) {
       }
     </div>
     <div style={{ background:'#fffbf0', border:'1px solid #f0d080', borderRadius:10, padding:'10px 14px', fontSize:13, color:'#7a5800' }}>
-      💡 Les joueurs invités pourront s'inscrire avec leur email et rejoindre automatiquement votre ligue.
+      Les joueurs invités pourront s'inscrire avec leur email et rejoindre automatiquement votre ligue.
     </div>
   </>;
 }
