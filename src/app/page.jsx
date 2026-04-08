@@ -388,7 +388,7 @@ export default function HockeyCapital() {
       {/* ---- ONGLET IMPACT LNH ---- */}
       {activeTab === 'impact' && (
         <div style={{ background: 'var(--color-background-primary)', border: '0.5px solid var(--color-border-tertiary)', borderRadius: 12, padding: '1rem 1.25rem' }}>
-          <div style={{ fontSize: 14, fontWeight: 500, marginBottom: 12 }}>Journal d'impact - résultats LNH > prix (VERSION INITIALE)</div>
+          <div style={{ fontSize: 14, fontWeight: 500, marginBottom: 12 }}>Journal d'impact - résultats LNH et prix (VERSION INITIALE)</div>
           {impactLog.length === 0 ? (
             <div style={{ color: 'var(--color-text-secondary)', fontSize: 13, textAlign: 'center', padding: 40 }}>En attente de résultats LNH...</div>
           ) : impactLog.map((entry, i) => {
