@@ -119,7 +119,7 @@ export default function HockeyCapital() {
           {isAuthenticated ? (
             <>
               <div style={{ background: 'var(--color-background-secondary)', borderRadius: 8, padding: '7px 14px', fontSize: 13 }}>
-                Liquidités: <strong>${pf?.cash?.toFixed(2) ?? '—'}</strong>
+                Liquidités: <strong>{'$'}{pf?.cash?.toFixed(2) ?? '—'}</strong>
               </div>
               <button onClick={() => setShowMyLeagues(true)} style={{ padding: '6px 14px', borderRadius: 8, border: '0.5px solid #c0392b', background: 'none', cursor: 'pointer', fontSize: 13, color: '#c0392b', fontWeight: 500 }}>
                 🏒 Mes Ligues
@@ -144,7 +144,7 @@ export default function HockeyCapital() {
             const ch = t.lastChange || 0;
             return (
               <span key={t.id} style={{ marginRight: 28, display: 'inline-block' }}>
-                <strong>{t.id}</strong> ${(t.price || 5).toFixed(2)}{' '}
+                <strong>{t.id}</strong> {'$'}{(t.price || 5).toFixed(2)}{' '}
                 <span style={{ color: ch > 0 ? '#27ae60' : ch < 0 ? '#c0392b' : 'inherit' }}>
                   {ch >= 0 ? '+' : ''}{ch.toFixed(2)}%
                 </span>
@@ -257,7 +257,7 @@ export default function HockeyCapital() {
                           {t.stats?.clinched && <span style={{ marginLeft: 6, fontSize: 10, padding: '1px 6px', borderRadius: 4, background: '#eafaf1', color: '#1e8449', fontWeight: 500 }}>Qualifié</span>}
                         </td>
                         <td style={{ padding: '8px 8px', color: 'var(--color-text-secondary)', fontSize: 11 }}>{t.division}</td>
-                        <td style={{ padding: '8px 8px', fontWeight: 500 }}>${price.toFixed(2)}</td>
+                        <td style={{ padding: '8px 8px', fontWeight: 500 }}>{'$'}{price.toFixed(2)}</td>
                         <td style={{ padding: '8px 8px' }}>
                           <span style={{ display: 'inline-block', padding: '2px 7px', borderRadius: 6, fontSize: 11, fontWeight: 500, background: ch > 0 ? '#eafaf1' : ch < 0 ? '#fdedec' : 'var(--color-background-secondary)', color: ch > 0 ? '#1e8449' : ch < 0 ? '#922b21' : 'var(--color-text-secondary)' }}>
                             {ch >= 0 ? '+' : ''}{ch.toFixed(2)}%
@@ -266,7 +266,6 @@ export default function HockeyCapital() {
                         <td style={{ padding: '8px 8px' }}>{t.stats?.points ?? '—'}</td>
                         <td style={{ padding: '8px 8px' }}>{t.stats?.division_rank ? '#' + t.stats.division_rank : '—'}</td>
                         <td style={{ padding: '8px 8px', fontSize: 12, color: 'var(--color-text-secondary)' }}>{t.available ?? 100}/100</td>
-                      </tr>
                       </tr>
                     );
                   })}
@@ -311,12 +310,12 @@ export default function HockeyCapital() {
                     <div style={{ width: 36, height: 36, borderRadius: '50%', background: TEAM_COLORS[pos.team_id] || '#888', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 500, color: 'white', flexShrink: 0 }}>{pos.team_id}</div>
                     <div style={{ flex: 1 }}>
                       <div style={{ fontWeight: 500, fontSize: 14 }}>{pos.teams?.name || pos.team_id}</div>
-                      <div style={{ fontSize: 12, color: 'var(--color-text-secondary)' }}>{pos.shares} action{pos.shares > 1 ? 's' : ''} · Coût moy. ${(pos.avg_cost || 0).toFixed(2)}</div>
+                      <div style={{ fontSize: 12, color: 'var(--color-text-secondary)' }}>{pos.shares} action{pos.shares > 1 ? 's' : ''} · Coût moy. {'$'}{(pos.avg_cost || 0).toFixed(2)}</div>
                     </div>
                     <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontWeight: 500 }}>${(pos.value || 0).toFixed(2)}</div>
+                      <div style={{ fontWeight: 500 }}>{'$'}{(pos.value || 0).toFixed(2)}</div>
                       <div style={{ fontSize: 12, color: (pos.pnl || 0) >= 0 ? '#27ae60' : '#c0392b' }}>
-                        {(pos.pnl || 0) >= 0 ? '+' : ''}${(pos.pnl || 0).toFixed(2)}
+                        {(pos.pnl || 0) >= 0 ? '+' : ''}{'$'}{(pos.pnl || 0).toFixed(2)}
                       </div>
                     </div>
                     <button onClick={() => setTradeModal({ team: teams.find(t => t.id === pos.team_id) || { id: pos.team_id, name: pos.team_id, price: pos.currentPrice }, side: 'sell' })}
@@ -344,7 +343,7 @@ export default function HockeyCapital() {
                   <div key={o.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 0', borderBottom: '0.5px solid var(--color-border-tertiary)', fontSize: 13 }}>
                     <span style={{ padding: '2px 8px', borderRadius: 6, fontSize: 11, fontWeight: 500, background: o.side === 'buy' ? '#eafaf1' : '#fdedec', color: o.side === 'buy' ? '#1e8449' : '#922b21' }}>{o.side === 'buy' ? 'Achat' : 'Vente'}</span>
                     <span style={{ fontWeight: 500 }}>{o.team_id}</span>
-                    <span style={{ color: 'var(--color-text-secondary)' }}>{o.qty} action{o.qty > 1 ? 's' : ''} @ ${parseFloat(o.price || 0).toFixed(2)}</span>
+                    <span style={{ color: 'var(--color-text-secondary)' }}>{o.qty} action{o.qty > 1 ? 's' : ''} @ {'$'}{parseFloat(o.price || 0).toFixed(2)}</span>
                     <span style={{ marginLeft: 'auto', fontSize: 11, color: 'var(--color-text-secondary)' }}>Limité</span>
                     <button onClick={() => cancelOrder(o.id).then(() => showToast('Ordre annulé'))}
                       style={{ padding: '3px 10px', borderRadius: 6, border: '0.5px solid var(--color-border-secondary)', background: 'none', cursor: 'pointer', fontSize: 12, color: 'var(--color-text-secondary)' }}>Annuler</button>
@@ -369,8 +368,8 @@ export default function HockeyCapital() {
                           <td style={{ padding: '7px 8px', fontWeight: 500 }}>{tx.team_id}</td>
                           <td style={{ padding: '7px 8px' }}><span style={{ padding: '2px 7px', borderRadius: 6, fontSize: 11, fontWeight: 500, background: tx.type === 'Achat' ? '#eafaf1' : '#fdedec', color: tx.type === 'Achat' ? '#1e8449' : '#922b21' }}>{tx.type}</span></td>
                           <td style={{ padding: '7px 8px' }}>{tx.qty}</td>
-                          <td style={{ padding: '7px 8px' }}>${parseFloat(tx.price).toFixed(2)}</td>
-                          <td style={{ padding: '7px 8px', fontWeight: 500 }}>${(tx.price * tx.qty).toFixed(2)}</td>
+                          <td style={{ padding: '7px 8px' }}>{'$'}{parseFloat(tx.price).toFixed(2)}</td>
+                          <td style={{ padding: '7px 8px', fontWeight: 500 }}>{'$'}{(tx.price * tx.qty).toFixed(2)}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -428,7 +427,7 @@ export default function HockeyCapital() {
                     <div style={{ fontSize: 11, color: 'var(--color-text-secondary)' }}>{d.shares_held} actions · Mult. ×{d.dividends?.multiplier || 1}</div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontWeight: 500, color: '#27ae60' }}>+${parseFloat(d.amount).toFixed(2)}</div>
+                    <div style={{ fontWeight: 500, color: '#27ae60' }}>+{'$'}{parseFloat(d.amount).toFixed(2)}</div>
                     <div style={{ fontSize: 11, color: 'var(--color-text-secondary)' }}>{new Date(d.paid_at).toLocaleDateString('fr-CA')}</div>
                   </div>
                 </div>
