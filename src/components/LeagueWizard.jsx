@@ -54,7 +54,7 @@ function Step1({ d, set }) {
       <div style={S.half}>
         <label style={S.lbl}>Nombre de joueurs</label>
         <select style={S.sel} value={d.players} onChange={e => set('players', parseInt(e.target.value))}>
-          {[2,3,4,5,6,7,8,10,12].map(n => <option key={n} value={n}>{n} joueurs</option>)}
+          {[2,3,4,5,6,7,8,10,12,15,20].map(n => <option key={n} value={n}>{n} joueurs</option>)}
         </select>
       </div>
       <div style={S.half}>
@@ -96,27 +96,13 @@ function Step2({ d, set }) {
         <input style={S.inp} type="number" min={0} value={d.mise} onChange={e => set('mise', parseFloat(e.target.value))} />
       </div>
       <div style={S.half}>
-        <label style={S.lbl}>Capital virtuel ($)</label>
-        <input style={S.inp} type="number" min={1000} step={500} value={d.capital} onChange={e => set('capital', parseFloat(e.target.value))} />
-      </div>
-    </div>
-    <div style={S.row}>
-      <div style={S.half}>
-        <label style={S.lbl}>Concentration max par équipe</label>
-        <select style={S.sel} value={d.maxConc} onChange={e => set('maxConc', parseInt(e.target.value))}>
-          <option value={10}>10%</option>
-          <option value={20}>20%</option>
-          <option value={30}>30%</option>
-          <option value={50}>50%</option>
-          <option value={100}>Aucune limite</option>
-        </select>
-      </div>
-      <div style={S.half}>
-        <label style={S.lbl}>Spread AMM</label>
-        <select style={S.sel} value={d.spread} onChange={e => set('spread', parseInt(e.target.value))}>
-          <option value={1}>1%</option>
-          <option value={2}>2%</option>
-          <option value={5}>5%</option>
+        <label style={S.lbl}>Capital virtuel par joueur</label>
+        <select style={S.sel} value={d.capital} onChange={e => set('capital', parseInt(e.target.value))}>
+          <option value={50000}>50 000 $</option>
+          <option value={75000}>75 000 $</option>
+          <option value={100000}>100 000 $</option>
+          <option value={150000}>150 000 $</option>
+          <option value={250000}>250 000 $</option>
         </select>
       </div>
     </div>
@@ -267,7 +253,7 @@ function Step5({ d, result }) {
 // ---- Composant principal LeagueWizard ----
 const DEFAULT = {
   name:'', players:6, duration:'season', draft:'libre', tradeLimit:5,
-  mise:20, capital:2500, maxConc:20, spread:2,
+  mise:20, capital:100000, maxConc:100, spread:2,
   dividendsEnabled:true, limitOrdersEnabled:true, elimPenalty:true,
   prizeMode:'top3', bonusWeekly:false, bonusMid:false,
   emails:[],

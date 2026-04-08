@@ -112,7 +112,7 @@ export default function LeaguePage({ league, token, onBack }) {
                     <div style={{ fontSize:12, color:'#888' }}>{t.division} · {t.stats?.points || 0}pts · {'#'}{t.stats?.division_rank || '—'}</div>
                   </div>
                   <div style={{ textAlign:'right', marginRight:12 }}>
-                    <div style={{ fontWeight:700, fontSize:15 }}>${(t.price||5).toFixed(2)}</div>
+                    <div style={{ fontWeight:700, fontSize:15 }}>{'$'}{(t.price||5).toFixed(2)}</div>
                     {held && held.shares > 0 && <div style={{ fontSize:11, color:'#27ae60' }}>{held.shares} détenues</div>}
                   </div>
                   <div style={{ display:'flex', gap:6 }}>
@@ -151,10 +151,10 @@ export default function LeaguePage({ league, token, onBack }) {
                     <div style={S.logo(p.team_id)}>{p.team_id}</div>
                     <div style={{ flex:1 }}>
                       <div style={{ fontWeight:600 }}>{p.teams?.name || p.team_id}</div>
-                      <div style={{ fontSize:12, color:'#888' }}>{p.shares} actions · Coût moy. ${(p.avg_cost||0).toFixed(2)}</div>
+                      <div style={{ fontSize:12, color:'#888' }}>{p.shares} actions · Coût moy. {'$'}{(p.avg_cost||0).toFixed(2)}</div>
                     </div>
                     <div style={{ textAlign:'right' }}>
-                      <div style={{ fontWeight:700 }}>${(p.value||0).toFixed(2)}</div>
+                      <div style={{ fontWeight:700 }}>{'$'}{(p.value||0).toFixed(2)}</div>
                       <div style={{ fontSize:12, color: p.pnl >= 0 ? '#27ae60' : '#e74c3c' }}>
                         {p.pnl >= 0 ? '+' : ''}{(p.pnl||0).toFixed(2)}$
                       </div>
@@ -215,7 +215,7 @@ export default function LeaguePage({ league, token, onBack }) {
             <label style={{ fontSize:14, fontWeight:600, color:'#333' }}>Quantité</label>
             <input type="number" min={1} value={qty} onChange={e => setQty(e.target.value)} style={S.inp} />
             <div style={{ fontSize:13, color:'#888', marginTop:6 }}>
-              Total estimé: <strong>${((tradeModal.team.price||5) * qty).toFixed(2)}</strong>
+              Total estimé: <strong>{'$'}{((tradeModal.team.price||5) * qty).toFixed(2)}</strong>
             </div>
             <button style={S.btnFull(tradeModal.side==='buy'?'#c0392b':'#1a5276')} onClick={executeTrade}>
               Confirmer {tradeModal.side==='buy'?"l'achat":'la vente'}
