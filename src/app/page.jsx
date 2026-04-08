@@ -118,9 +118,6 @@ export default function HockeyCapital() {
         <div style={{ marginLeft: 'auto', display: 'flex', gap: 8, alignItems: 'center' }}>
           {isAuthenticated ? (
             <>
-              <div style={{ background: 'var(--color-background-secondary)', borderRadius: 8, padding: '7px 14px', fontSize: 13 }}>
-                Liquidites: <strong>{'$'}{pf?.cash?.toFixed(2) ?? '-'}</strong>
-              </div>
               <button onClick={() => setShowMyLeagues(true)} style={{ padding: '6px 14px', borderRadius: 8, border: '0.5px solid #c0392b', background: 'none', cursor: 'pointer', fontSize: 13, color: '#c0392b', fontWeight: 500 }}>
                 HC Mes Ligues
               </button>
@@ -161,10 +158,10 @@ export default function HockeyCapital() {
         {[
           { key: 'market', label: 'Marche', always: true },
           { key: 'impact', label: 'Impact LNH', always: true },
-          { key: 'portfolio', label: 'Portefeuille' + (pf ? ' . ' + Math.round(pf.totalValue || 0).toLocaleString('fr-CA') + '$' : ''), auth: true },
-          { key: 'orders', label: 'Mes ordres' + (activeOrders.length ? ' (' + activeOrders.length + ')' : ''), auth: true },
-          { key: 'dividends', label: 'Dividendes', auth: true },
-        ].filter(tab => tab.always || (tab.auth && isAuthenticated)).map(tab => (
+          { key: 'portfolio', label: 'Portefeuille' + (pf ? ' . ' + Math.round(pf.totalValue || 0).toLocaleString('fr-CA') + '$' : ''), auth: true, league: true },
+          { key: 'orders', label: 'Mes ordres' + (activeOrders.length ? ' (' + activeOrders.length + ')' : ''), auth: true, league: true },
+          { key: 'dividends', label: 'Dividendes', auth: true, league: true },
+        ].filter(tab => tab.always || (tab.auth && isAuthenticated && (!tab.league || currentLeague))).map(tab => (
           <button key={tab.key} onClick={() => setActiveTab(tab.key)}
             style={{ padding: '8px 14px', fontSize: 13, cursor: 'pointer', border: 'none', background: 'none', color: activeTab === tab.key ? 'var(--color-text-primary)' : 'var(--color-text-secondary)', borderBottom: activeTab === tab.key ? '2px solid #c0392b' : '2px solid transparent', marginBottom: -1, fontWeight: activeTab === tab.key ? 500 : 400, borderRadius: '8px 8px 0 0' }}>
             {tab.label}

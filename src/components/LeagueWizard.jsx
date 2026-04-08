@@ -54,7 +54,7 @@ function Step1({ d, set }) {
       <div style={S.half}>
         <label style={S.lbl}>Nombre de joueurs</label>
         <select style={S.sel} value={d.players} onChange={e => set('players', parseInt(e.target.value))}>
-          {[2,3,4,5,6,7,8,10,12,15,20].map(n => <option key={n} value={n}>{n} joueurs</option>)}
+          {[1,2,3,4,5,6,7,8,10,12,15,20].map(n => <option key={n} value={n}>{n === 1 ? '1 joueur (solo)' : `${n} joueurs`}</option>)}
         </select>
       </div>
       <div style={S.half}>
@@ -187,7 +187,11 @@ function Step4({ d, set }) {
   function removeEmail(e) { set('emails', (d.emails || []).filter(x => x !== e)); }
 
   return <>
-    <div style={S.info}>Invitez vos joueurs par email. Ils recevront le code de la ligue et pourront s'inscrire et rejoindre directement.</div>
+    <div style={S.info}>
+      {d.players === 1
+        ? 'Ligue solo - aucune invitation requise. Passez directement a la confirmation.'
+        : 'Invitez vos joueurs par email. Ils recevront le code de la ligue et pourront s\'inscrire et rejoindre directement.'}
+    </div>
     <div style={S.mb}>
       <label style={S.lbl}>Ajouter un joueur par email</label>
       <div style={{ display:'flex', gap:8 }}>
@@ -252,7 +256,7 @@ function Step5({ d, result }) {
 
 // ---- Composant principal LeagueWizard ----
 const DEFAULT = {
-  name:'', players:6, duration:'season', draft:'libre', tradeLimit:5,
+  name:'', players:1, duration:'season', draft:'libre', tradeLimit:5,
   mise:20, capital:100000, maxConc:100, spread:2,
   dividendsEnabled:true, limitOrdersEnabled:true, elimPenalty:true,
   prizeMode:'top3', bonusWeekly:false, bonusMid:false,
