@@ -4,6 +4,7 @@ import { useAuth, useMarket, usePortfolio, useOrders, useImpactLog } from '../ho
 import { orders as ordersApi, market as marketApi } from '../lib/api';
 import LeagueWizard from '../components/LeagueWizard';
 import MyLeagues from '../components/MyLeagues';
+import LeaguePage from '../components/LeaguePage';
 
 // ---- Couleurs équipes ----
 const TEAM_COLORS = {
@@ -30,6 +31,7 @@ export default function HockeyCapital() {
   const [authModal, setAuthModal] = useState(null);   // 'login' | 'register'
   const [showLeagueWizard, setShowLeagueWizard] = useState(false);
   const [showMyLeagues, setShowMyLeagues] = useState(false);
+  const [currentLeague, setCurrentLeague] = useState(null);
   const [toast, setToast] = useState(null);
   const [searchQ, setSearchQ] = useState('');
   const [sortBy, setSortBy] = useState('name');
@@ -531,12 +533,22 @@ export default function HockeyCapital() {
         </div>
       )}
 
+      {/* ---- PAGE LIGUE ---- */}
+      {currentLeague && (
+        <LeaguePage
+          league={currentLeague}
+          token={user?.token}
+          onBack={() => setCurrentLeague(null)}
+        />
+      )}
+
       {/* ---- MODALS LIGUES ---- */}
       {showMyLeagues && (
         <MyLeagues
           token={user?.token}
           onClose={() => setShowMyLeagues(false)}
           onCreateNew={() => setShowLeagueWizard(true)}
+          onOpenLeague={(lg) => setCurrentLeague(lg)}
         />
       )}
       {showLeagueWizard && (
