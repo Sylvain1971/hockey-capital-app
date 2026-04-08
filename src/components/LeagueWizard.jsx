@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState } from 'react';
 
 const S = {
@@ -45,7 +45,7 @@ function StepDots({ current }) {
 // ---- Étape 1: Infos de base ----
 function Step1({ d, set }) {
   return <>
-    <div style={S.info}>Configurez votre ligue — les joueurs rejoindront via un code ou invitation email.</div>
+    <div style={S.info}>Configurez votre ligue -- les joueurs rejoindront via un code ou invitation email.</div>
     <div style={S.mb}>
       <label style={S.lbl}>Nom de la ligue *</label>
       <input style={S.inp} placeholder="Ex: Pool Hockey 2026" value={d.name} onChange={e => set('name', e.target.value)} />
@@ -70,8 +70,8 @@ function Step1({ d, set }) {
     <div style={S.mb}>
       <label style={S.lbl}>Mode de draft</label>
       <select style={S.sel} value={d.draft} onChange={e => set('draft', e.target.value)}>
-        <option value="libre">Libre — chacun achète ses équipes</option>
-        <option value="serpentin">Serpentin — ordre alterné</option>
+        <option value="libre">Libre -- chacun achète ses équipes</option>
+        <option value="serpentin">Serpentin -- ordre alterné</option>
       </select>
     </div>
     <div style={S.mb}>
@@ -140,15 +140,15 @@ function Step3({ d, set }) {
     {d.prizeMode !== 'custom' && d.mise > 0 && (
       <div style={{ background:'#f9f9f9', borderRadius:10, padding:'12px 16px', marginBottom:16 }}>
         <div style={{ fontSize:13, fontWeight:600, color:'#333', marginBottom:8 }}>Aperçu avec {d.players} joueurs ({(d.players * d.mise).toFixed(2)}$ total)</div>
-        {d.prizeMode === 'winner' && <div style={{ fontSize:14, color:'#27ae60' }}>🥇 1er: {(d.players * d.mise).toFixed(2)}$</div>}
+        {d.prizeMode === 'winner' && <div style={{ fontSize:14, color:'#27ae60' }}>1er: 1er: {(d.players * d.mise).toFixed(2)}$</div>}
         {d.prizeMode === 'top2' && <>
-          <div style={{ fontSize:14, color:'#27ae60' }}>🥇 1er: {(d.players * d.mise * 0.70).toFixed(2)}$</div>
-          <div style={{ fontSize:14, color:'#2980b9' }}>🥈 2e: {(d.players * d.mise * 0.30).toFixed(2)}$</div>
+          <div style={{ fontSize:14, color:'#27ae60' }}>1er: 1er: {(d.players * d.mise * 0.70).toFixed(2)}$</div>
+          <div style={{ fontSize:14, color:'#2980b9' }}>2e: 2e: {(d.players * d.mise * 0.30).toFixed(2)}$</div>
         </>}
         {d.prizeMode === 'top3' && <>
-          <div style={{ fontSize:14, color:'#27ae60' }}>🥇 1er: {(d.players * d.mise * 0.60).toFixed(2)}$</div>
-          <div style={{ fontSize:14, color:'#2980b9' }}>🥈 2e: {(d.players * d.mise * 0.30).toFixed(2)}$</div>
-          <div style={{ fontSize:14, color:'#8e44ad' }}>🥉 3e: {(d.players * d.mise * 0.10).toFixed(2)}$</div>
+          <div style={{ fontSize:14, color:'#27ae60' }}>1er: 1er: {(d.players * d.mise * 0.60).toFixed(2)}$</div>
+          <div style={{ fontSize:14, color:'#2980b9' }}>2e: 2e: {(d.players * d.mise * 0.30).toFixed(2)}$</div>
+          <div style={{ fontSize:14, color:'#8e44ad' }}>3e: 3e: {(d.players * d.mise * 0.10).toFixed(2)}$</div>
         </>}
       </div>
     )}
@@ -187,7 +187,7 @@ function Step4({ d, set }) {
   function removeEmail(e) { set('emails', (d.emails || []).filter(x => x !== e)); }
 
   return <>
-    <div style={S.info}>{d.players === 1 ? '🏒 Ligue solo — vous jouez seul contre le marché! Aucun invité requis.' : 'Invitez vos joueurs par email. Ils recevront le code de la ligue.'}</div>
+    <div style={S.info}>{d.players === 1 ? 'HC Ligue solo -- vous jouez seul contre le marché! Aucun invité requis.' : 'Invitez vos joueurs par email. Ils recevront le code de la ligue.'}</div>
     {d.players > 1 && <>
       <div style={S.mb}>
         <label style={S.lbl}>Ajouter un joueur par email</label>
@@ -202,7 +202,7 @@ function Step4({ d, set }) {
     <div style={{ marginBottom:16 }}>
       <div style={{ fontSize:13, color:'#888', marginBottom:8 }}>{(d.emails || []).length}/{d.players - 1} invités ajoutés</div>
       {(d.emails || []).length === 0
-        ? <div style={{ fontSize:13, color:'#aaa', fontStyle:'italic' }}>Aucun invité — vous pouvez aussi partager le code manuellement après création.</div>
+        ? <div style={{ fontSize:13, color:'#aaa', fontStyle:'italic' }}>Aucun invité -- vous pouvez aussi partager le code manuellement après création.</div>
         : (d.emails || []).map(e => (
           <span key={e} style={S.chip}>{e} <span style={S.chipX} onClick={() => removeEmail(e)}>×</span></span>
         ))
@@ -218,7 +218,7 @@ function Step4({ d, set }) {
 function Step5({ d, result }) {
   if (result) return (
     <div style={S.success}>
-      <div style={{ fontSize:40 }}>🏒</div>
+      <div style={{ fontSize:40 }}>HC</div>
       <div style={{ fontSize:22, fontWeight:700, color:'#111', margin:'12px 0 4px' }}>Ligue créée!</div>
       <div style={{ fontSize:14, color:'#555', marginBottom:16 }}>Partagez ce code avec vos joueurs:</div>
       <div style={S.code}>{result.invite_code}</div>
@@ -226,7 +226,7 @@ function Step5({ d, result }) {
         {(d.emails || []).length > 0 && `Invitations envoyées à ${(d.emails || []).length} joueur(s).`}
       </div>
       <div style={{ fontSize:13, color:'#555', marginTop:12 }}>
-        Lien: <strong>hockey-capital-app.vercel.app</strong> → Rejoindre avec le code
+        Lien: <strong>hockey-capital-app.vercel.app</strong> -> Rejoindre avec le code
       </div>
     </div>
   );
@@ -324,9 +324,9 @@ export default function LeagueWizard({ onClose, token }) {
                   <button style={{ ...S.btn, opacity: canNext() ? 1 : 0.5 }}
                     disabled={!canNext()}
                     onClick={() => step === 3 ? submit() : setStep(s => s + 1)}>
-                    {loading ? 'Création...' : step === 3 ? 'Créer la ligue 🏒' : 'Suivant →'}
+                    {loading ? 'Création...' : step === 3 ? 'Créer la ligue HC' : 'Suivant ->'}
                   </button>
-                  {step > 0 && <button style={S.btnSec} onClick={() => setStep(s => s - 1)}>← Retour</button>}
+                  {step > 0 && <button style={S.btnSec} onClick={() => setStep(s => s - 1)}><- Retour</button>}
                 </>
               ) : null}
             </div>

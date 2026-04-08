@@ -1,5 +1,5 @@
-export const metadata = {
-  title: 'Hockey Capital — Bourse sportive LNH',
+﻿export const metadata = {
+  title: 'Hockey Capital -- Bourse sportive LNH',
   description: 'Achetez et vendez des actions d\'équipes LNH. Prix influencés par les vrais résultats.',
 };
 

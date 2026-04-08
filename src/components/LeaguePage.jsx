@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState, useEffect } from 'react';
 
 const TEAM_COLORS = {
@@ -82,18 +82,18 @@ export default function LeaguePage({ league, token, onBack }) {
   return (
     <div style={S.overlay}>
       <div style={S.hdr}>
-        <button style={S.back} onClick={onBack}>← Retour</button>
+        <button style={S.back} onClick={onBack}><- Retour</button>
         <div style={{ flex:1 }}>
           <div style={{ fontWeight:700, fontSize:17, color:'#111' }}>{league.name}</div>
-          <div style={{ fontSize:12, color:'#888' }}>Code: <strong>{league.invite_code}</strong> · {league.max_players} joueurs · {league.duration}</div>
+          <div style={{ fontSize:12, color:'#888' }}>Code: <strong>{league.invite_code}</strong> . {league.max_players} joueurs . {league.duration}</div>
         </div>
-        <div style={{ fontSize:14, fontWeight:600, color:'#111' }}>💰 {cash.toFixed(2)}$</div>
+        <div style={{ fontSize:14, fontWeight:600, color:'#111' }}>$ {cash.toFixed(2)}$</div>
       </div>
 
       <div style={S.body}>
         {/* Tabs */}
         <div style={{ display:'flex', gap:0, marginBottom:16, border:'1px solid #eee', borderRadius:10, overflow:'hidden', background:'#f8f8f8' }}>
-          {[['marche','📊 Marché'],['portefeuille','💼 Portefeuille'],['classement','🏆 Classement']].map(([id, lbl]) => (
+          {[['marche','[>] Marché'],['portefeuille','[P] Portefeuille'],['classement','[C] Classement']].map(([id, lbl]) => (
             <button key={id} onClick={() => setTab(id)} style={{ flex:1, padding:'10px 0', border:'none', background: tab===id?'#c0392b':'none', color: tab===id?'#fff':'#555', fontWeight: tab===id?700:400, cursor:'pointer', fontSize:13 }}>{lbl}</button>
           ))}
         </div>
@@ -101,7 +101,7 @@ export default function LeaguePage({ league, token, onBack }) {
         {/* TAB MARCHÉ */}
         {tab === 'marche' && (
           <div style={S.section}>
-            <div style={{ fontSize:15, fontWeight:700, color:'#111', marginBottom:12 }}>Marché — Acheter / Vendre</div>
+            <div style={{ fontSize:15, fontWeight:700, color:'#111', marginBottom:12 }}>Marché -- Acheter / Vendre</div>
             {loading ? <div style={{ color:'#aaa', textAlign:'center', padding:20 }}>Chargement...</div> : teams.map(t => {
               const held = positions.find(p => p.team_id === t.id);
               return (
@@ -109,7 +109,7 @@ export default function LeaguePage({ league, token, onBack }) {
                   <div style={S.logo(t.id)}>{t.id}</div>
                   <div style={{ flex:1 }}>
                     <div style={{ fontWeight:600, fontSize:14, color:'#111' }}>{t.name}</div>
-                    <div style={{ fontSize:12, color:'#888' }}>{t.division} · {t.stats?.points || 0}pts · {'#'}{t.stats?.division_rank || '—'}</div>
+                    <div style={{ fontSize:12, color:'#888' }}>{t.division} . {t.stats?.points || 0}pts . {'#'}{t.stats?.division_rank || '--'}</div>
                   </div>
                   <div style={{ textAlign:'right', marginRight:12 }}>
                     <div style={{ fontWeight:700, fontSize:15 }}>{'$'}{(t.price||5).toFixed(2)}</div>
@@ -151,7 +151,7 @@ export default function LeaguePage({ league, token, onBack }) {
                     <div style={S.logo(p.team_id)}>{p.team_id}</div>
                     <div style={{ flex:1 }}>
                       <div style={{ fontWeight:600 }}>{p.teams?.name || p.team_id}</div>
-                      <div style={{ fontSize:12, color:'#888' }}>{p.shares} actions · Coût moy. {'$'}{(p.avg_cost||0).toFixed(2)}</div>
+                      <div style={{ fontSize:12, color:'#888' }}>{p.shares} actions . Coût moy. {'$'}{(p.avg_cost||0).toFixed(2)}</div>
                     </div>
                     <div style={{ textAlign:'right' }}>
                       <div style={{ fontWeight:700 }}>{'$'}{(p.value||0).toFixed(2)}</div>
