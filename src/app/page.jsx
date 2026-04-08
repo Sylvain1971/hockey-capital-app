@@ -134,23 +134,37 @@ export default function HockeyCapital() {
         </div>
       </div>
 
-      {/* TICKER */}
+      {/* TICKER MOBILE */}
+      <style>{`
+        @keyframes tickerScroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .ticker-track {
+          display: inline-flex;
+          animation: tickerScroll 60s linear infinite;
+          white-space: nowrap;
+        }
+        .ticker-track:hover { animation-play-state: paused; }
+      `}</style>
       <div style={{ background: 'var(--color-background-secondary)', borderRadius: 8, padding: '7px 12px', marginBottom: '1rem', overflow: 'hidden', whiteSpace: 'nowrap', fontSize: 12 }}>
-        <span style={{ color: 'var(--color-text-secondary)' }}>
-          {teams.slice(0, 16).map(t => {
+        <div className="ticker-track">
+          {[...teams, ...teams].map((t, idx) => {
             const ch = t.changePct || 0;
+            const hasChange = t.prevPrice && t.prevPrice !== t.price;
             return (
-              <span key={t.id} style={{ marginRight: 28, display: 'inline-block' }}>
-                <strong>{t.id}</strong> {'$'}{(t.price || 25).toFixed(2)}{' '}
-                {t.prevPrice && t.prevPrice !== t.price ? (
-                  <span style={{ color: ch > 0 ? '#27ae60' : ch < 0 ? '#c0392b' : 'inherit' }}>
-                    {ch >= 0 ? '+' : ''}{ch.toFixed(2)}%
+              <span key={idx} style={{ marginRight: 32, display: 'inline-block', color: 'var(--color-text-secondary)' }}>
+                <strong style={{ color: 'var(--color-text-primary)' }}>{t.id}</strong>{' '}
+                {'$'}{(t.price || 25).toFixed(2)}{' '}
+                {hasChange ? (
+                  <span style={{ color: ch > 0 ? '#27ae60' : ch < 0 ? '#c0392b' : 'inherit', fontWeight: 500 }}>
+                    {ch > 0 ? '+' : ''}{ch.toFixed(2)}%
                   </span>
-                ) : null}
+                ) : <span style={{ color: 'var(--color-text-secondary)' }}>-</span>}
               </span>
             );
           })}
-        </span>
+        </div>
       </div>
 
       {/* TABS */}
@@ -178,7 +192,7 @@ export default function HockeyCapital() {
               { label: 'Capitalisation', value: teams.length ? Math.round(teams.reduce((s, t) => s + (t.price || 25) * 120000000, 0) / 1000000).toLocaleString('fr-CA') + ' M$' : '-', sub: '32 equipes LNH' },
               { label: 'Prix moyen', value: teams.length ? '$' + (teams.reduce((s, t) => s + (t.price || 25), 0) / teams.length).toFixed(2) : '-', sub: 'par action' },
               { label: 'Meilleur gain', value: (() => { const t = teams.filter(x => x.prevPrice && x.prevPrice !== x.price); return t.length ? '+' + Math.max(...t.map(x => x.changePct || 0)).toFixed(2) + '%' : '-'; })(), sub: (() => { const t = teams.filter(x => x.prevPrice && x.prevPrice !== x.price); return t.length ? t.reduce((b, x) => (x.changePct || 0) > (b.changePct || 0) ? x : b, t[0])?.id : '-'; })(), up: true },
-              { label: 'Plus grande baisse', value: (() => { const t = teams.filter(x => x.prevPrice && x.prevPrice !== x.price); return t.length ? Math.min(...t.map(x => x.changePct || 0)).toFixed(2) + '%' : '-'; })(), sub: (() => { const t = teams.filter(x => x.prevPrice && x.prevPrice !== x.price); return t.length ? t.reduce((w, x) => (x.changePct || 0) < (w.changePct || 0) ? x : w, t[0])?.id : '-'; })(), down: true },
+              { label: 'Plus grande baisse', value: (() => { const t = teams.filter(x => x.prevPrice && x.prevPrice !== x.price && (x.changePct || 0) < 0); return t.length ? Math.min(...t.map(x => x.changePct || 0)).toFixed(2) + '%' : '-'; })(), sub: (() => { const t = teams.filter(x => x.prevPrice && x.prevPrice !== x.price && (x.changePct || 0) < 0); return t.length ? t.reduce((w, x) => (x.changePct || 0) < (w.changePct || 0) ? x : w, t[0])?.id : '-'; })(), down: true },
             ].map((m, i) => (
               <div key={i} style={{ background: 'var(--color-background-secondary)', borderRadius: 8, padding: '12px 14px' }}>
                 <div style={{ fontSize: 11, color: 'var(--color-text-secondary)', marginBottom: 3 }}>{m.label}</div>
