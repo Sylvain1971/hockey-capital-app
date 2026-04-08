@@ -49,7 +49,7 @@ export default function LeaguePage({ league, token, onBack }) {
     try {
       const [t, p, m] = await Promise.all([
         fetch(`${API}/api/market/teams`, { headers: hdrs }).then(r => r.json()),
-        fetch(`${API}/api/portfolio`, { headers: hdrs }).then(r => r.json()),
+        fetch(`${API}/api/leagues/${league.id}/portfolio`, { headers: hdrs }).then(r => r.json()),
         fetch(`${API}/api/leagues/${league.id}/members`, { headers: hdrs }).then(r => r.json()),
       ]);
       setTeams(Array.isArray(t) ? t : []);
@@ -63,9 +63,9 @@ export default function LeaguePage({ league, token, onBack }) {
 
   async function executeTrade() {
     try {
-      const res = await fetch(`${API}/api/orders/place`, {
+      const res = await fetch(`${API}/api/leagues/${league.id}/market/${tradeModal.side === 'buy' ? 'buy' : 'sell'}`, {
         method: 'POST', headers: hdrs,
-        body: JSON.stringify({ teamId: tradeModal.team.id, side: tradeModal.side, orderType: 'market', qty: parseInt(qty) }),
+        body: JSON.stringify({ teamId: tradeModal.team.id, qty: parseInt(qty), orderType: 'market' }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
@@ -87,13 +87,13 @@ export default function LeaguePage({ league, token, onBack }) {
           <div style={{ fontWeight:700, fontSize:17, color:'#111' }}>{league.name}</div>
           <div style={{ fontSize:12, color:'#888' }}>Code: <strong>{league.invite_code}</strong> . {league.max_players} joueurs . {league.duration}</div>
         </div>
-        <div style={{ fontSize:14, fontWeight:600, color:'#111' }}>[$] {cash.toFixed(2)}$</div>
+        <div style={{ fontSize:14, fontWeight:600, color:'#111' }}>Liquidités: <span style={{ color:'#27ae60' }}>${cash.toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}</span></div>
       </div>
 
       <div style={S.body}>
         {/* Tabs */}
         <div style={{ display:'flex', gap:0, marginBottom:16, border:'1px solid #eee', borderRadius:10, overflow:'hidden', background:'#f8f8f8' }}>
-          {[['marche','Marche Marche'],['portefeuille','[P] Portefeuille'],['classement','[C] Classement']].map(([id, lbl]) => (
+          {[['marche','Marché'],['portefeuille','Portefeuille'],['classement','Classement']].map(([id, lbl]) => (
             <button key={id} onClick={() => setTab(id)} style={{ flex:1, padding:'10px 0', border:'none', background: tab===id?'#c0392b':'none', color: tab===id?'#fff':'#555', fontWeight: tab===id?700:400, cursor:'pointer', fontSize:13 }}>{lbl}</button>
           ))}
         </div>
