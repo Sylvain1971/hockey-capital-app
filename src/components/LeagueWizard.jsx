@@ -225,7 +225,7 @@ function Step5({ d, result }) {
         {(d.emails || []).length > 0 && `Invitations envoyees a ${(d.emails || []).length} joueur(s).`}
       </div>
       <div style={{ fontSize:13, color:'#555', marginTop:12 }}>
-        Lien: <strong>hockey-capital-app.vercel.app</strong> > Rejoindre avec le code
+        Lien: <strong>hockey-capital-app.vercel.app</strong> — Code: 
       </div>
     </div>
   );

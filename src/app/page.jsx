@@ -469,7 +469,7 @@ export default function HockeyCapital() {
               </div>
               {authModal === 'register' && (
                 <div style={{ fontSize: 13, color: '#555', marginBottom: 16, background: '#f5f9ff', borderRadius: 10, padding: '10px 14px', border: '1px solid #dce8ff' }}>
-                  [$] Capital de depart: <strong style={{ color: '#c0392b' }}>$2 500.00</strong> - chaque joueur commence avec le meme capital
+                  Capital de depart fixe par le createur de la ligue - chaque joueur commence avec le meme montant
                 </div>
               )}
               <button type="submit" style={{ width: '100%', padding: '14px', borderRadius: 10, border: 'none', background: '#c0392b', color: 'white', cursor: 'pointer', fontSize: 16, fontWeight: 600, marginBottom: 12 }}>
