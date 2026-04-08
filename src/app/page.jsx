@@ -217,3 +217,139 @@ export default function HockeyCapital() {
           </div>
         </div>
       )}
+
+      {/* PORTEFEUILLE */}
+      {activeTab==='portfolio' && isAuthenticated && (
+        <div>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(4,minmax(0,1fr))', gap:10, marginBottom:'1.5rem' }}>
+            {[
+              {label:'Valeur totale', value:'$'+fmt(pf?.totalValue||0)},
+              {label:'Liquidités', value:'$'+fmt(pf?.cash||0)},
+              {label:'Gain / Perte', value:(pf?.pnl>=0?'+':'')+fmt(pf?.pnl||0)+'$', up:(pf?.pnl||0)>0, down:(pf?.pnl||0)<0},
+              {label:'Positions', value:pf?.positions?.length?pf.positions.length+' équipe'+(pf.positions.length>1?'s':''):'—'},
+            ].map((m,i)=>(
+              <div key={i} style={{ background:'var(--color-background-secondary)', borderRadius:8, padding:'12px 14px' }}>
+                <div style={{ fontSize:11, color:'var(--color-text-secondary)', marginBottom:3 }}>{m.label}</div>
+                <div style={{ fontSize:20, fontWeight:500, color:m.up?'#27ae60':m.down?'#c0392b':'var(--color-text-primary)' }}>{m.value}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ background:'var(--color-background-primary)', border:'0.5px solid var(--color-border-tertiary)', borderRadius:12, padding:'1rem 1.25rem' }}>
+            <div style={{ fontSize:15, fontWeight:500, marginBottom:12 }}>Mes positions</div>
+            {(!pf?.positions||pf.positions.length===0) ? (
+              <div style={{ color:'var(--color-text-secondary)', fontSize:13, textAlign:'center', padding:30 }}>Aucune position. Ouvrez une ligue pour commencer à investir.</div>
+            ) : pf.positions.map(pos=>(
+              <div key={pos.team_id} style={{ display:'flex', alignItems:'center', gap:12, padding:'10px 0', borderBottom:'0.5px solid var(--color-border-tertiary)' }}>
+                <span style={{ width:32, height:32, borderRadius:'50%', background:TEAM_COLORS[pos.team_id]||'#888', display:'inline-flex', alignItems:'center', justifyContent:'center', fontSize:9, fontWeight:500, color:'white' }}>{pos.team_id}</span>
+                <div style={{ flex:1 }}>
+                  <div style={{ fontWeight:500, fontSize:14 }}>{pos.teams?.name||pos.team_id}</div>
+                  <div style={{ fontSize:12, color:'var(--color-text-secondary)' }}>{pos.shares} action{pos.shares>1?'s':''} · Coût moy. {'$'}{fmt(pos.avg_cost||0)}</div>
+                </div>
+                <div style={{ textAlign:'right' }}>
+                  <div style={{ fontWeight:500 }}>{'$'}{fmt(pos.value||0)}</div>
+                  <div style={{ fontSize:12, color:(pos.pnl||0)>=0?'#27ae60':'#c0392b' }}>{(pos.pnl||0)>=0?'+':''}{fmt(pos.pnl||0)}{'$'}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* MES ORDRES */}
+      {activeTab==='orders' && isAuthenticated && (
+        <div style={{ background:'var(--color-background-primary)', border:'0.5px solid var(--color-border-tertiary)', borderRadius:12, padding:'1rem 1.25rem' }}>
+          <div style={{ fontSize:15, fontWeight:500, marginBottom:12 }}>Ordres actifs</div>
+          {activeOrders.length===0 ? <div style={{ color:'var(--color-text-secondary)', fontSize:13, textAlign:'center', padding:30 }}>Aucun ordre actif.</div>
+          : activeOrders.map(o=>(
+            <div key={o.id} style={{ display:'flex', alignItems:'center', gap:8, padding:'8px 0', borderBottom:'0.5px solid var(--color-border-tertiary)' }}>
+              <span style={{ width:24, height:24, borderRadius:'50%', background:TEAM_COLORS[o.team_id]||'#888', display:'inline-flex', alignItems:'center', justifyContent:'center', fontSize:8, color:'white' }}>{o.team_id}</span>
+              <span style={{ flex:1, fontSize:13 }}>{o.side==='buy'?'Achat':'Vente'} {o.qty} action{o.qty>1?'s':''} @ {'$'}{fmt(o.price)}</span>
+              <button onClick={()=>cancelOrder(o.id)} style={{ padding:'4px 10px', borderRadius:6, border:'0.5px solid var(--color-border-secondary)', background:'none', cursor:'pointer', fontSize:12, color:'var(--color-text-primary)' }}>Annuler</button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* DIVIDENDES */}
+      {activeTab==='dividends' && isAuthenticated && (
+        <div style={{ background:'var(--color-background-primary)', border:'0.5px solid var(--color-border-tertiary)', borderRadius:12, padding:'1rem 1.25rem' }}>
+          <div style={{ fontSize:15, fontWeight:500, marginBottom:12 }}>Dividendes reçus</div>
+          {(!dividends||dividends.length===0) ? <div style={{ color:'var(--color-text-secondary)', fontSize:13, textAlign:'center', padding:30 }}>Aucun dividende reçu.</div>
+          : dividends.map((d,i)=>(
+            <div key={i} style={{ display:'flex', alignItems:'center', gap:12, padding:'8px 0', borderBottom:'0.5px solid var(--color-border-tertiary)' }}>
+              <span style={{ flex:1, fontSize:13 }}>{d.reason||'Dividende'} — {d.team_id}</span>
+              <span style={{ fontWeight:500, color:'#27ae60' }}>+{'$'}{fmt(d.amount)}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* IMPACT LNH */}
+      {activeTab==='impact' && (
+        <div style={{ background:'var(--color-background-primary)', border:'0.5px solid var(--color-border-tertiary)', borderRadius:12, padding:'1rem 1.25rem' }}>
+          <div style={{ fontSize:15, fontWeight:500, marginBottom:12 }}>Impact des résultats LNH sur les prix</div>
+          {(!impactLog||impactLog.length===0) ? <div style={{ color:'var(--color-text-secondary)', fontSize:13, textAlign:'center', padding:30 }}>Aucun événement enregistré.</div>
+          : impactLog.slice(0,30).map((e,i)=>(
+            <div key={i} style={{ display:'flex', alignItems:'center', gap:8, padding:'6px 0', borderBottom:'0.5px solid var(--color-border-tertiary)', fontSize:12 }}>
+              <span style={{ width:28, color:'var(--color-text-secondary)' }}>{e.team_id}</span>
+              <span style={{ flex:1 }}>{e.description}</span>
+              <span style={{ color:e.pct_change>=0?'#27ae60':'#c0392b', fontWeight:500 }}>{e.pct_change>=0?'+':''}{fmt(e.pct_change)}%</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* MODAL AUTH */}
+      {authModal && (
+        <div style={{ position:'fixed', top:0, left:0, right:0, bottom:0, background:'rgba(0,0,0,0.6)', zIndex:1000, display:'flex', alignItems:'center', justifyContent:'center', padding:16 }}>
+          <div style={{ background:'#fff', borderRadius:16, padding:'28px 24px', width:'100%', maxWidth:420, boxSizing:'border-box', boxShadow:'0 20px 60px rgba(0,0,0,0.3)' }}>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:20 }}>
+              <div style={{ fontSize:20, fontWeight:700, color:'#111' }}>{authModal==='login'?'Connexion':'Créer un compte'}</div>
+              <button onClick={()=>setAuthModal(null)} style={{ background:'#f0f0f0', border:'none', borderRadius:'50%', width:32, height:32, fontSize:18, cursor:'pointer', color:'#555' }}>×</button>
+            </div>
+            <form onSubmit={authModal==='login'?handleLogin:handleRegister}>
+              {authModal==='register' && (
+                <div style={{ marginBottom:14 }}>
+                  <label style={{ fontSize:14, fontWeight:600, color:'#333', display:'block', marginBottom:6 }}>Nom d'utilisateur</label>
+                  <input name="username" required placeholder="ex: HockeyKing99" style={{ width:'100%', padding:'12px 14px', border:'1.5px solid #ddd', borderRadius:10, fontSize:16, boxSizing:'border-box' }} />
+                </div>
+              )}
+              <div style={{ marginBottom:14 }}>
+                <label style={{ fontSize:14, fontWeight:600, color:'#333', display:'block', marginBottom:6 }}>Courriel</label>
+                <input name="email" type="email" required placeholder="ton@email.com" style={{ width:'100%', padding:'12px 14px', border:'1.5px solid #ddd', borderRadius:10, fontSize:16, boxSizing:'border-box' }} />
+              </div>
+              <div style={{ marginBottom:20 }}>
+                <label style={{ fontSize:14, fontWeight:600, color:'#333', display:'block', marginBottom:6 }}>Mot de passe</label>
+                <input name="password" type="password" required placeholder="8 caractères minimum" style={{ width:'100%', padding:'12px 14px', border:'1.5px solid #ddd', borderRadius:10, fontSize:16, boxSizing:'border-box' }} />
+              </div>
+              {authModal==='register' && (
+                <div style={{ background:'#f0f7ff', border:'1px solid #cce0ff', borderRadius:10, padding:'10px 14px', marginBottom:16, fontSize:13, color:'#1a4a7a' }}>
+                  💰 Capital de départ fixé par la ligue — chaque joueur commence avec le même montant
+                </div>
+              )}
+              <button type="submit" style={{ width:'100%', padding:14, borderRadius:10, border:'none', background:'#c0392b', color:'#fff', fontSize:16, fontWeight:700, cursor:'pointer' }}>
+                {authModal==='login'?'Se connecter':'Créer mon compte'}
+              </button>
+              <div style={{ textAlign:'center', marginTop:12, fontSize:13, color:'#888' }}>
+                {authModal==='login'?(<>Pas de compte? <span style={{ color:'#c0392b', cursor:'pointer', fontWeight:600 }} onClick={()=>setAuthModal('register')}>S'inscrire</span></>)
+                :(<>Déjà un compte? <span style={{ color:'#c0392b', cursor:'pointer', fontWeight:600 }} onClick={()=>setAuthModal('login')}>Se connecter</span></>)}
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODALS LIGUES */}
+      {showMyLeagues && <MyLeagues token={user?.token} onClose={()=>setShowMyLeagues(false)} onCreateNew={()=>{setShowMyLeagues(false);setShowLeagueWizard(true);}} onOpenLeague={lg=>{setShowMyLeagues(false);setCurrentLeague(lg);}} />}
+      {showLeagueWizard && <LeagueWizard token={user?.token} onClose={()=>setShowLeagueWizard(false)} />}
+
+      {/* TOAST */}
+      {toast && (
+        <div style={{ position:'fixed', bottom:20, right:20, background:'#111', color:'#fff', padding:'10px 18px', borderRadius:10, fontSize:13, zIndex:9999, maxWidth:300, boxShadow:'0 4px 20px rgba(0,0,0,0.3)' }}>
+          {toast.msg}
+        </div>
+      )}
+
+    </div>
+  );
+}

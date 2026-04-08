@@ -54,7 +54,7 @@ function Step1({ d, set }) {
       <div style={S.half}>
         <label style={S.lbl}>Nombre de joueurs</label>
         <select style={S.sel} value={d.players} onChange={e => set('players', parseInt(e.target.value))}>
-          {[2,3,4,5,6,7,8,10,12,15,20].map(n => <option key={n} value={n}>{n} joueurs</option>)}
+          {[1,2,3,4,5,6,7,8,10,12,15,20].map(n => <option key={n} value={n}>{n === 1 ? '1 joueur (solo)' : n + ' joueurs'}</option>)}
         </select>
       </div>
       <div style={S.half}>
@@ -178,7 +178,7 @@ function Step4({ d, set }) {
     const e = emailInput.trim().toLowerCase();
     if (!e.includes('@')) { setErr('Email invalide'); return; }
     if ((d.emails || []).includes(e)) { setErr('Déjà ajouté'); return; }
-    if ((d.emails || []).length >= d.players - 1) { setErr(`Maximum ${d.players - 1} invités (vous êtes le créateur)`); return; }
+    if ((d.emails || []).length >= d.players - 1 && d.players > 1) { setErr('Maximum ' + (d.players - 1) + ' invités (vous êtes le créateur)'); return; }
     set('emails', [...(d.emails || []), e]);
     setEmailInput('');
     setErr('');
@@ -187,9 +187,10 @@ function Step4({ d, set }) {
   function removeEmail(e) { set('emails', (d.emails || []).filter(x => x !== e)); }
 
   return <>
-    <div style={S.info}>Invitez vos joueurs par email. Ils recevront le code de la ligue et pourront s'inscrire et rejoindre directement.</div>
-    <div style={S.mb}>
-      <label style={S.lbl}>Ajouter un joueur par email</label>
+    <div style={S.info}>{d.players === 1 ? '🏒 Ligue solo — vous jouez seul contre le marché! Aucun invité requis.' : 'Invitez vos joueurs par email. Ils recevront le code de la ligue.'}</div>
+    {d.players > 1 && <>
+      <div style={S.mb}>
+        <label style={S.lbl}>Ajouter un joueur par email</label>
       <div style={{ display:'flex', gap:8 }}>
         <input style={{ ...S.inp, marginBottom:0 }} placeholder="joueur@email.com" value={emailInput}
           onChange={e => setEmailInput(e.target.value)}
