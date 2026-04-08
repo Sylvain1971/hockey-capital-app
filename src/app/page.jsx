@@ -133,9 +133,11 @@ export default function HockeyCapital() {
           return (
             <span key={t.id} style={{ marginRight:28, display:'inline-block' }}>
               <strong>{t.id}</strong>{' '}{'$'}{(t.price||25).toFixed(2)}{' '}
-              <span style={{ color:ch>0?'#27ae60':ch<0?'#c0392b':'inherit' }}>
-                {ch>=0?'+':''}{ch.toFixed(2)}%
-              </span>
+              {t.prevPrice && t.prevPrice !== t.price ? (
+                <span style={{ color:ch>0?'#27ae60':ch<0?'#c0392b':'inherit' }}>
+                  {ch>=0?'+':''}{ch.toFixed(2)}%
+                </span>
+              ) : null}
             </span>
           );
         })}
@@ -165,8 +167,8 @@ export default function HockeyCapital() {
             {[
               { label:'Capitalisation totale', value: Math.round(totalMarketCap/1_000_000).toLocaleString('fr-CA') + ' M$', sub:'32 équipes LNH' },
               { label:'Prix moyen', value:'$' + (teams.length ? fmt(teams.reduce((s,t)=>s+(t.price||25),0)/teams.length) : '25.00'), sub:'par action' },
-              { label:'Meilleur gain', value:teams.length?('+'+Math.max(...teams.map(t=>t.changePct||0)).toFixed(2)+'%'):'—', sub:teams.length?teams.reduce((b,t)=>(t.changePct||0)>(b.changePct||0)?t:b,teams[0])?.id:'—', up:true },
-              { label:'Plus grande baisse', value:teams.length?(Math.min(...teams.map(t=>t.changePct||0)).toFixed(2)+'%'):'—', sub:teams.length?teams.reduce((w,t)=>(t.changePct||0)<(w.changePct||0)?t:w,teams[0])?.id:'—', down:true },
+              { label:'Meilleur gain', value: (() => { const t=teams.filter(x=>x.prevPrice&&x.prevPrice!==x.price); return t.length?('+'+Math.max(...t.map(x=>x.changePct||0)).toFixed(2)+'%'):'—'; })(), sub: (() => { const t=teams.filter(x=>x.prevPrice&&x.prevPrice!==x.price); return t.length?t.reduce((b,x)=>(x.changePct||0)>(b.changePct||0)?x:b,t[0])?.id:'—'; })(), up:true },
+              { label:'Plus grande baisse', value: (() => { const t=teams.filter(x=>x.prevPrice&&x.prevPrice!==x.price); return t.length?(Math.min(...t.map(x=>x.changePct||0)).toFixed(2)+'%'):'—'; })(), sub: (() => { const t=teams.filter(x=>x.prevPrice&&x.prevPrice!==x.price); return t.length?t.reduce((w,x)=>(x.changePct||0)<(w.changePct||0)?x:w,t[0])?.id:'—'; })(), down:true },
             ].map((m,i) => (
               <div key={i} style={{ background:'var(--color-background-secondary)', borderRadius:8, padding:'12px 14px' }}>
                 <div style={{ fontSize:11, color:'var(--color-text-secondary)', marginBottom:3 }}>{m.label}</div>
@@ -224,6 +226,7 @@ export default function HockeyCapital() {
                     <tr><td colSpan={6} style={{ textAlign:'center', padding:40, color:'var(--color-text-secondary)' }}>Chargement...</td></tr>
                   ) : filteredTeams.map(t => {
                     const ch = t.changePct || 0;
+                    const hasChange = t.prevPrice && t.prevPrice !== t.price;
                     const price = t.price || 25;
                     return (
                       <tr key={t.id} style={{ borderBottom:'0.5px solid var(--color-border-tertiary)' }}
@@ -237,9 +240,13 @@ export default function HockeyCapital() {
                         <td style={{ padding:'8px 8px', color:'var(--color-text-secondary)', fontSize:11 }}>{t.division}</td>
                         <td style={{ padding:'8px 8px', fontWeight:600 }}>{'$'}{price.toFixed(2)}</td>
                         <td style={{ padding:'8px 8px' }}>
-                          <span style={{ display:'inline-block', padding:'2px 7px', borderRadius:6, fontSize:11, fontWeight:500, background:ch>0?'#eafaf1':ch<0?'#fdedec':'var(--color-background-secondary)', color:ch>0?'#1e8449':ch<0?'#922b21':'var(--color-text-secondary)' }}>
-                            {ch>=0?'+':''}{ch.toFixed(2)}%
-                          </span>
+                          {hasChange ? (
+                            <span style={{ display:'inline-block', padding:'2px 7px', borderRadius:6, fontSize:11, fontWeight:500, background:ch>0?'#eafaf1':ch<0?'#fdedec':'var(--color-background-secondary)', color:ch>0?'#1e8449':ch<0?'#922b21':'var(--color-text-secondary)' }}>
+                              {ch>=0?'+':''}{ch.toFixed(2)}%
+                            </span>
+                          ) : (
+                            <span style={{ fontSize:11, color:'var(--color-text-secondary)' }}>—</span>
+                          )}
                         </td>
                         <td style={{ padding:'8px 8px' }}>{t.stats?.points ?? '—'}</td>
                         <td style={{ padding:'8px 8px' }}>{t.stats?.division_rank ? '#'+t.stats.division_rank : '—'}</td>
