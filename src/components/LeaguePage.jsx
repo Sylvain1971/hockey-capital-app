@@ -82,7 +82,7 @@ export default function LeaguePage({ league, token, onBack }) {
   return (
     <div style={S.overlay}>
       <div style={S.hdr}>
-        <button style={S.back} onClick={onBack}>< Retour</button>
+        <button style={S.back} onClick={onBack}>Retour</button>
         <div style={{ flex:1 }}>
           <div style={{ fontWeight:700, fontSize:17, color:'#111' }}>{league.name}</div>
           <div style={{ fontSize:12, color:'#888' }}>Code: <strong>{league.invite_code}</strong> . {league.max_players} joueurs . {league.duration}</div>

@@ -325,7 +325,7 @@ export default function LeagueWizard({ onClose, token }) {
                     onClick={() => step === 3 ? submit() : setStep(s => s + 1)}>
                     {loading ? 'Création...' : step === 3 ? 'Créer la ligue HC' : 'Suivant >'}
                   </button>
-                  {step > 0 && <button style={S.btnSec} onClick={() => setStep(s => s - 1)}>< Retour</button>}
+                  {step > 0 && <button style={S.btnSec} onClick={() => setStep(s => s - 1)}>Retour</button>}
                 </>
               ) : null}
             </div>

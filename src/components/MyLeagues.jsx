@@ -130,7 +130,7 @@ export default function MyLeagues({ onClose, token, onCreateNew, onOpenLeague })
                               <button style={{ ...S.btnDanger, background:'#e74c3c', color:'#fff' }} onClick={() => deleteLeague(lg.id)}>Oui</button>
                               <button style={S.btnCopy} onClick={() => setConfirmDelete(null)}>Non</button>
                             </div>
-                          : <button style={S.btnDanger} onClick={() => setConfirmDelete(lg.id)}>Suppr Supprimer</button>
+                          : <button style={S.btnDanger} onClick={() => setConfirmDelete(lg.id)}>Supprimer</button>
                       )}
                     </div>
                   </div>
