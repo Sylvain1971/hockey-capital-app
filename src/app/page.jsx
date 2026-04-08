@@ -2,6 +2,8 @@
 import { useState, useCallback } from 'react';
 import { useAuth, useMarket, usePortfolio, useOrders, useImpactLog } from '../hooks/useMarket';
 import { orders as ordersApi, market as marketApi } from '../lib/api';
+import LeagueWizard from '../components/LeagueWizard';
+import MyLeagues from '../components/MyLeagues';
 
 // ---- Couleurs équipes ----
 const TEAM_COLORS = {
@@ -26,6 +28,8 @@ export default function HockeyCapital() {
   const [activeTab, setActiveTab] = useState('market');
   const [tradeModal, setTradeModal] = useState(null); // { team, side }
   const [authModal, setAuthModal] = useState(null);   // 'login' | 'register'
+  const [showLeagueWizard, setShowLeagueWizard] = useState(false);
+  const [showMyLeagues, setShowMyLeagues] = useState(false);
   const [toast, setToast] = useState(null);
   const [searchQ, setSearchQ] = useState('');
   const [sortBy, setSortBy] = useState('name');
@@ -115,6 +119,9 @@ export default function HockeyCapital() {
               <div style={{ background: 'var(--color-background-secondary)', borderRadius: 8, padding: '7px 14px', fontSize: 13 }}>
                 Liquidités: <strong>${pf?.cash?.toFixed(2) ?? '—'}</strong>
               </div>
+              <button onClick={() => setShowMyLeagues(true)} style={{ padding: '6px 14px', borderRadius: 8, border: '0.5px solid #c0392b', background: 'none', cursor: 'pointer', fontSize: 13, color: '#c0392b', fontWeight: 500 }}>
+                🏒 Mes Ligues
+              </button>
               <button onClick={logout} style={{ padding: '6px 14px', borderRadius: 8, border: '0.5px solid var(--color-border-secondary)', background: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--color-text-primary)' }}>
                 Déconnexion
               </button>
@@ -509,6 +516,21 @@ export default function HockeyCapital() {
             </form>
           </div>
         </div>
+      )}
+
+      {/* ---- MODALS LIGUES ---- */}
+      {showMyLeagues && (
+        <MyLeagues
+          token={user?.token}
+          onClose={() => setShowMyLeagues(false)}
+          onCreateNew={() => setShowLeagueWizard(true)}
+        />
+      )}
+      {showLeagueWizard && (
+        <LeagueWizard
+          token={user?.token}
+          onClose={() => setShowLeagueWizard(false)}
+        />
       )}
 
       {/* ---- TOAST ---- */}
