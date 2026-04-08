@@ -418,40 +418,44 @@ export default function HockeyCapital() {
 
       {/* ---- MODAL AUTH ---- */}
       {authModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ background: 'var(--color-background-primary)', borderRadius: 12, border: '0.5px solid var(--color-border-tertiary)', padding: '1.5rem', width: 380, maxWidth: '95vw' }}>
-            <div style={{ fontSize: 17, fontWeight: 500, marginBottom: '1rem' }}>
-              {authModal === 'login' ? 'Connexion' : 'Créer un compte'}
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
+          <div style={{ background: '#ffffff', borderRadius: 16, padding: '24px 20px', width: '100%', maxWidth: 400, boxSizing: 'border-box', boxShadow: '0 20px 60px rgba(0,0,0,0.3)' }}>
+            {/* Header */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+              <div style={{ fontSize: 20, fontWeight: 600, color: '#111' }}>
+                {authModal === 'login' ? 'Connexion' : 'Créer un compte'}
+              </div>
+              <button type="button" onClick={() => setAuthModal(null)} style={{ background: '#f0f0f0', border: 'none', borderRadius: '50%', width: 32, height: 32, cursor: 'pointer', fontSize: 18, color: '#555', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>×</button>
             </div>
             <form onSubmit={authModal === 'login' ? handleLogin : handleRegister}>
               {authModal === 'register' && (
-                <div style={{ marginBottom: 12 }}>
-                  <label style={{ fontSize: 12, color: 'var(--color-text-secondary)', display: 'block', marginBottom: 4 }}>Nom d'utilisateur</label>
-                  <input name="username" required placeholder="ex: HockeyKing99" style={{ width: '100%', padding: '8px 10px', border: '0.5px solid var(--color-border-secondary)', borderRadius: 8, background: 'var(--color-background-primary)', color: 'var(--color-text-primary)', fontSize: 14 }} />
+                <div style={{ marginBottom: 16 }}>
+                  <label style={{ fontSize: 14, fontWeight: 500, color: '#333', display: 'block', marginBottom: 6 }}>Nom d'utilisateur</label>
+                  <input name="username" required placeholder="ex: HockeyKing99" style={{ width: '100%', padding: '12px 14px', border: '1.5px solid #ddd', borderRadius: 10, background: '#fff', color: '#111', fontSize: 16, boxSizing: 'border-box', outline: 'none' }} />
                 </div>
               )}
-              <div style={{ marginBottom: 12 }}>
-                <label style={{ fontSize: 12, color: 'var(--color-text-secondary)', display: 'block', marginBottom: 4 }}>Courriel</label>
-                <input name="email" type="email" required style={{ width: '100%', padding: '8px 10px', border: '0.5px solid var(--color-border-secondary)', borderRadius: 8, background: 'var(--color-background-primary)', color: 'var(--color-text-primary)', fontSize: 14 }} />
+              <div style={{ marginBottom: 16 }}>
+                <label style={{ fontSize: 14, fontWeight: 500, color: '#333', display: 'block', marginBottom: 6 }}>Courriel</label>
+                <input name="email" type="email" required placeholder="ton@email.com" style={{ width: '100%', padding: '12px 14px', border: '1.5px solid #ddd', borderRadius: 10, background: '#fff', color: '#111', fontSize: 16, boxSizing: 'border-box', outline: 'none' }} />
               </div>
-              <div style={{ marginBottom: '1rem' }}>
-                <label style={{ fontSize: 12, color: 'var(--color-text-secondary)', display: 'block', marginBottom: 4 }}>Mot de passe</label>
-                <input name="password" type="password" required minLength={8} style={{ width: '100%', padding: '8px 10px', border: '0.5px solid var(--color-border-secondary)', borderRadius: 8, background: 'var(--color-background-primary)', color: 'var(--color-text-primary)', fontSize: 14 }} />
+              <div style={{ marginBottom: 20 }}>
+                <label style={{ fontSize: 14, fontWeight: 500, color: '#333', display: 'block', marginBottom: 6 }}>Mot de passe</label>
+                <input name="password" type="password" required minLength={8} placeholder="8 caractères minimum" style={{ width: '100%', padding: '12px 14px', border: '1.5px solid #ddd', borderRadius: 10, background: '#fff', color: '#111', fontSize: 16, boxSizing: 'border-box', outline: 'none' }} />
               </div>
               {authModal === 'register' && (
-                <div style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginBottom: 12, background: 'var(--color-background-secondary)', borderRadius: 8, padding: '8px 12px' }}>
-                  Liquidités initiales: <strong>$2 500.00</strong> offerts à l'inscription
+                <div style={{ fontSize: 13, color: '#555', marginBottom: 16, background: '#f5f9ff', borderRadius: 10, padding: '10px 14px', border: '1px solid #dce8ff' }}>
+                  🎁 Liquidités initiales: <strong style={{ color: '#c0392b' }}>$2 500.00</strong> offerts à l'inscription
                 </div>
               )}
-              <div style={{ display: 'flex', gap: 8 }}>
-                <button type="button" onClick={() => setAuthModal(null)} style={{ flex: 1, padding: '8px', borderRadius: 8, border: '0.5px solid var(--color-border-secondary)', background: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--color-text-primary)' }}>Annuler</button>
-                <button type="submit" style={{ flex: 2, padding: '8px', borderRadius: 8, border: 'none', background: '#c0392b', color: 'white', cursor: 'pointer', fontSize: 13, fontWeight: 500 }}>
-                  {authModal === 'login' ? 'Se connecter' : 'Créer mon compte'}
-                </button>
-              </div>
-              <div style={{ textAlign: 'center', marginTop: 12, fontSize: 12, color: 'var(--color-text-secondary)', cursor: 'pointer' }}
+              <button type="submit" style={{ width: '100%', padding: '14px', borderRadius: 10, border: 'none', background: '#c0392b', color: 'white', cursor: 'pointer', fontSize: 16, fontWeight: 600, marginBottom: 12 }}>
+                {authModal === 'login' ? 'Se connecter' : 'Créer mon compte'}
+              </button>
+              <div style={{ textAlign: 'center', fontSize: 14, color: '#666', cursor: 'pointer', padding: '4px' }}
                 onClick={() => setAuthModal(authModal === 'login' ? 'register' : 'login')}>
-                {authModal === 'login' ? "Pas de compte? S'inscrire" : "Déjà un compte? Se connecter"}
+                {authModal === 'login' ? "Pas de compte? " : "Déjà un compte? "}
+                <span style={{ color: '#c0392b', fontWeight: 500 }}>
+                  {authModal === 'login' ? "S'inscrire" : "Se connecter"}
+                </span>
               </div>
             </form>
           </div>
