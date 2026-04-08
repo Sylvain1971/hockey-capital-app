@@ -19,7 +19,7 @@ const S = {
   btnOpen: { padding:'6px 14px', borderRadius:8, border:'none', background:'#c0392b', color:'#fff', fontSize:13, cursor:'pointer', fontWeight:600 },
 };
 
-const STATUS_LABEL = { open:'En attente', active:'Active', closed:'Terminée' };
+const STATUS_LABEL = { open:'En attente', active:'Active', closed:'Terminee' };
 
 export default function MyLeagues({ onClose, token, onCreateNew, onOpenLeague }) {
   const [leagues, setLeagues] = useState([]);
@@ -87,7 +87,7 @@ export default function MyLeagues({ onClose, token, onCreateNew, onOpenLeague })
       <div style={S.card}>
         <div style={S.hdr}>
           <div style={{ fontSize:19, fontWeight:700, color:'#111' }}>Mes Ligues</div>
-          <button onClick={onClose} style={{ background:'#f0f0f0', border:'none', borderRadius:'50%', width:32, height:32, fontSize:18, cursor:'pointer', color:'#555' }}>×</button>
+          <button onClick={onClose} style={{ background:'#f0f0f0', border:'none', borderRadius:'50%', width:32, height:32, fontSize:18, cursor:'pointer', color:'#555' }}>x</button>
         </div>
         <div style={S.body}>
 
@@ -108,7 +108,7 @@ export default function MyLeagues({ onClose, token, onCreateNew, onOpenLeague })
                         <div style={{ fontWeight:700, fontSize:15, color:'#111' }}>{lg.name}</div>
                         <div style={{ fontSize:12, color:'#888', marginTop:3 }}>
                           {lg.max_players} joueurs . {lg.duration} . Code: <strong style={{ letterSpacing:1 }}>{lg.invite_code}</strong>
-                          {lg.is_creator && <span style={{ marginLeft:8, padding:'1px 8px', borderRadius:10, background:'#fff0f0', color:'#c0392b', fontSize:11, fontWeight:600 }}>Créateur</span>}
+                          {lg.is_creator && <span style={{ marginLeft:8, padding:'1px 8px', borderRadius:10, background:'#fff0f0', color:'#c0392b', fontSize:11, fontWeight:600 }}>Createur</span>}
                         </div>
                         <div style={{ fontSize:12, color:'#666', marginTop:2 }}>
                           Mise: <strong>{lg.mise_reelle}$</strong> . Capital: <strong>{(lg.capital_virtuel||0).toLocaleString()}$</strong>
@@ -120,7 +120,7 @@ export default function MyLeagues({ onClose, token, onCreateNew, onOpenLeague })
                       <button style={S.btnOpen} onClick={() => handleOpenLeague(lg)}>
                         > Ouvrir la ligue
                       </button>
-                      <button style={S.btnCopy} onClick={() => { navigator.clipboard?.writeText(lg.invite_code); setMsg('Code copié!'); setTimeout(() => setMsg(''), 2000); }}>
+                      <button style={S.btnCopy} onClick={() => { navigator.clipboard?.writeText(lg.invite_code); setMsg('Code copie!'); setTimeout(() => setMsg(''), 2000); }}>
                          {lg.invite_code}
                       </button>
                       {lg.is_creator && (
@@ -155,7 +155,7 @@ export default function MyLeagues({ onClose, token, onCreateNew, onOpenLeague })
             </div>
             {err && <div style={S.err}>{err}</div>}
           </div>
-          <button style={S.btn} onClick={() => { onClose(); onCreateNew(); }}>+ Créer une nouvelle ligue</button>
+          <button style={S.btn} onClick={() => { onClose(); onCreateNew(); }}>+ Creer une nouvelle ligue</button>
         </div>
       </div>
     </div>

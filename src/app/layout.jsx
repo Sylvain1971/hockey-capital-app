@@ -1,6 +1,6 @@
-﻿export const metadata = {
+export const metadata = {
   title: 'Hockey Capital -- Bourse sportive LNH',
-  description: 'Achetez et vendez des actions d\'équipes LNH. Prix influencés par les vrais résultats.',
+  description: 'Achetez et vendez des actions d\'equipes LNH. Prix influences par les vrais resultats.',
 };
 
 export default function RootLayout({ children }) {

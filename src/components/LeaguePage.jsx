@@ -69,7 +69,7 @@ export default function LeaguePage({ league, token, onBack }) {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
-      showToast(tradeModal.side === 'buy' ? `Achat de ${qty} action(s) ${tradeModal.team.id} confirmé!` : `Vente de ${qty} action(s) confirmée!`);
+      showToast(tradeModal.side === 'buy' ? `Achat de ${qty} action(s) ${tradeModal.team.id} confirme!` : `Vente de ${qty} action(s) confirmee!`);
       setTradeModal(null);
       setQty(1);
       fetchAll();
@@ -93,15 +93,15 @@ export default function LeaguePage({ league, token, onBack }) {
       <div style={S.body}>
         {/* Tabs */}
         <div style={{ display:'flex', gap:0, marginBottom:16, border:'1px solid #eee', borderRadius:10, overflow:'hidden', background:'#f8f8f8' }}>
-          {[['marche',' Marché'],['portefeuille',' Portefeuille'],['classement',' Classement']].map(([id, lbl]) => (
+          {[['marche',' Marche'],['portefeuille',' Portefeuille'],['classement',' Classement']].map(([id, lbl]) => (
             <button key={id} onClick={() => setTab(id)} style={{ flex:1, padding:'10px 0', border:'none', background: tab===id?'#c0392b':'none', color: tab===id?'#fff':'#555', fontWeight: tab===id?700:400, cursor:'pointer', fontSize:13 }}>{lbl}</button>
           ))}
         </div>
 
-        {/* TAB MARCHÉ */}
+        {/* TAB MARCHE */}
         {tab === 'marche' && (
           <div style={S.section}>
-            <div style={{ fontSize:15, fontWeight:700, color:'#111', marginBottom:12 }}>Marché - Acheter / Vendre</div>
+            <div style={{ fontSize:15, fontWeight:700, color:'#111', marginBottom:12 }}>Marche - Acheter / Vendre</div>
             {loading ? <div style={{ color:'#aaa', textAlign:'center', padding:20 }}>Chargement...</div> : teams.map(t => {
               const held = positions.find(p => p.team_id === t.id);
               return (
@@ -113,7 +113,7 @@ export default function LeaguePage({ league, token, onBack }) {
                   </div>
                   <div style={{ textAlign:'right', marginRight:12 }}>
                     <div style={{ fontWeight:700, fontSize:15 }}>{'$'}{(t.price||5).toFixed(2)}</div>
-                    {held && held.shares > 0 && <div style={{ fontSize:11, color:'#27ae60' }}>{held.shares} détenues</div>}
+                    {held && held.shares > 0 && <div style={{ fontSize:11, color:'#27ae60' }}>{held.shares} detenues</div>}
                   </div>
                   <div style={{ display:'flex', gap:6 }}>
                     <button style={S.btnBuy} onClick={() => { setTradeModal({ team:t, side:'buy' }); setQty(100); }}>Acheter</button>
@@ -132,7 +132,7 @@ export default function LeaguePage({ league, token, onBack }) {
           <div>
             <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:12, marginBottom:16 }}>
               {[
-                ['Liquidités', `${cash.toFixed(2)}$`],
+                ['Liquidites', `${cash.toFixed(2)}$`],
                 ['Valeur actions', `${(portfolio?.stockValue||0).toFixed(2)}$`],
                 ['Valeur totale', `${(portfolio?.totalValue||0).toFixed(2)}$`],
               ].map(([lbl, val]) => (
@@ -145,13 +145,13 @@ export default function LeaguePage({ league, token, onBack }) {
             <div style={S.section}>
               <div style={{ fontSize:15, fontWeight:700, marginBottom:12 }}>Mes positions</div>
               {positions.length === 0
-                ? <div style={{ color:'#aaa', fontSize:14 }}>Aucune position. Allez dans le Marché pour acheter des actions!</div>
+                ? <div style={{ color:'#aaa', fontSize:14 }}>Aucune position. Allez dans le Marche pour acheter des actions!</div>
                 : positions.map(p => (
                   <div key={p.team_id} style={S.teamRow}>
                     <div style={S.logo(p.team_id)}>{p.team_id}</div>
                     <div style={{ flex:1 }}>
                       <div style={{ fontWeight:600 }}>{p.teams?.name || p.team_id}</div>
-                      <div style={{ fontSize:12, color:'#888' }}>{p.shares} actions . Coût moy. {'$'}{(p.avg_cost||0).toFixed(2)}</div>
+                      <div style={{ fontSize:12, color:'#888' }}>{p.shares} actions . Cout moy. {'$'}{(p.avg_cost||0).toFixed(2)}</div>
                     </div>
                     <div style={{ textAlign:'right' }}>
                       <div style={{ fontWeight:700 }}>{'$'}{(p.value||0).toFixed(2)}</div>
@@ -177,7 +177,7 @@ export default function LeaguePage({ league, token, onBack }) {
                   <div style={{ width:28, height:28, borderRadius:'50%', background: i===0?'#f1c40f':i===1?'#bdc3c7':i===2?'#cd7f32':'#eee', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:700, fontSize:13, color: i<3?'#fff':'#888', flexShrink:0 }}>{i+1}</div>
                   <div style={{ flex:1, marginLeft:4 }}>
                     <div style={{ fontWeight:600, fontSize:14 }}>{m.username || m.user_id?.substring(0,8)}</div>
-                    {m.is_creator && <span style={{ fontSize:11, color:'#c0392b', fontWeight:600 }}>Créateur</span>}
+                    {m.is_creator && <span style={{ fontSize:11, color:'#c0392b', fontWeight:600 }}>Createur</span>}
                   </div>
                   <div style={{ fontWeight:700, fontSize:15 }}>{(m.net_worth||m.cash||0).toFixed(2)}$</div>
                 </div>
@@ -199,13 +199,13 @@ export default function LeaguePage({ league, token, onBack }) {
                   <div style={{ fontSize:13, color:'#666' }}>{tradeModal.team.name}</div>
                 </div>
               </div>
-              <button onClick={() => setTradeModal(null)} style={{ background:'#f0f0f0', border:'none', borderRadius:'50%', width:32, height:32, fontSize:18, cursor:'pointer' }}>×</button>
+              <button onClick={() => setTradeModal(null)} style={{ background:'#f0f0f0', border:'none', borderRadius:'50%', width:32, height:32, fontSize:18, cursor:'pointer' }}>x</button>
             </div>
             <div style={{ background:'#f7f7f7', borderRadius:10, padding:'12px 14px', marginBottom:16 }}>
               {[
                 ['Prix actuel', ('$') + (tradeModal.team.price||25).toFixed(2)],
                 ['Variation (veille)', (tradeModal.team.changePct >= 0 ? '+' : '') + (tradeModal.team.changePct||0).toFixed(2) + '%'],
-                ['Vos liquidités', ('$') + cash.toFixed(2)],
+                ['Vos liquidites', ('$') + cash.toFixed(2)],
               ].map(([l,v]) => (
                 <div key={l} style={{ display:'flex', justifyContent:'space-between', fontSize:14, padding:'5px 0', borderBottom:'1px solid #eee' }}>
                   <span style={{ color:'#666' }}>{l}</span><span style={{ fontWeight:600 }}>{v}</span>
@@ -221,11 +221,11 @@ export default function LeaguePage({ league, token, onBack }) {
                 </button>
               ))}
             </div>
-            <input type="number" min={1} value={qty} onChange={e => setQty(parseInt(e.target.value)||1)} style={S.inp} placeholder="Ou entrez une quantité..." />
+            <input type="number" min={1} value={qty} onChange={e => setQty(parseInt(e.target.value)||1)} style={S.inp} placeholder="Ou entrez une quantite..." />
             <div style={{ fontSize:13, color:'#888', marginTop:8, padding:'8px 12px', background:'#f0f7ff', borderRadius:8 }}>
-              Total estimé: <strong>{'$'}{((tradeModal.team.price||25) * qty).toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}</strong>
+              Total estime: <strong>{'$'}{((tradeModal.team.price||25) * qty).toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}</strong>
               {tradeModal.side === 'buy' && cash < (tradeModal.team.price||25) * qty && (
-                <span style={{ color:'#c0392b', marginLeft:8 }}>⚠ Liquidités insuffisantes</span>
+                <span style={{ color:'#c0392b', marginLeft:8 }}>(!) Liquidites insuffisantes</span>
               )}
             </div>
             <button style={S.btnFull(tradeModal.side==='buy'?'#c0392b':'#1a5276')} onClick={executeTrade}>
