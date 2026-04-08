@@ -272,7 +272,7 @@ export default function HockeyCapital() {
                   { label: 'Valeur totale', value: `$${(pf?.totalValue || 0).toFixed(2)}` },
                   { label: 'Liquidités', value: `$${(pf?.cash || 0).toFixed(2)}` },
                   { label: 'Gain / Perte', value: `${(pf?.pnl || 0) >= 0 ? '+' : ''}$${(pf?.pnl || 0).toFixed(2)}`, up: (pf?.pnl || 0) > 0, down: (pf?.pnl || 0) < 0 },
-                  { label: 'Badge', value: pf?.badge || 'Débutant' },
+                  { label: 'Positions', value: pf?.positions?.length ? `${pf.positions.length} équipe${pf.positions.length > 1 ? 's' : ''}` : '—' },
                 ].map((m, i) => (
                   <div key={i} style={{ background: 'var(--color-background-secondary)', borderRadius: 8, padding: '12px 14px' }}>
                     <div style={{ fontSize: 11, color: 'var(--color-text-secondary)', marginBottom: 3 }}>{m.label}</div>
