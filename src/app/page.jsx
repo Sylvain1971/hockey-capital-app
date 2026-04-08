@@ -206,12 +206,25 @@ export default function HockeyCapital() {
               </select>
             </div>
 
+            {/* Bannière pour utilisateurs non connectés */}
+            {!isAuthenticated && (
+              <div style={{ background:'#fff8f0', border:'1px solid #f0d080', borderRadius:10, padding:'12px 16px', marginBottom:16, display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:8 }}>
+                <div style={{ fontSize:13, color:'#7a5800' }}>
+                  🏒 <strong>Hockey Capital</strong> — Connectez-vous pour acheter et vendre des actions d'équipes LNH.
+                </div>
+                <div style={{ display:'flex', gap:8 }}>
+                  <button onClick={() => setAuthModal('login')} style={{ padding:'6px 14px', borderRadius:8, border:'1px solid #c0392b', background:'none', color:'#c0392b', cursor:'pointer', fontSize:13, fontWeight:500 }}>Connexion</button>
+                  <button onClick={() => setAuthModal('register')} style={{ padding:'6px 14px', borderRadius:8, border:'none', background:'#c0392b', color:'white', cursor:'pointer', fontSize:13, fontWeight:600 }}>S'inscrire</button>
+                </div>
+              </div>
+            )}
+
             {/* Tableau */}
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
                 <thead>
                   <tr>
-                    {['Équipe','Division','Prix','Var.','Pts LNH','Rang div.','Dispo.',''].map(h => (
+                    {['Équipe','Division','Prix','Var.','Pts LNH','Rang div.','Dispo.', ...(isAuthenticated ? [''] : [])].map(h => (
                       <th key={h} style={{ textAlign: 'left', padding: '7px 8px', color: 'var(--color-text-secondary)', fontWeight: 400, borderBottom: '0.5px solid var(--color-border-tertiary)', fontSize: 12, whiteSpace: 'nowrap' }}>{h}</th>
                     ))}
                   </tr>
@@ -242,16 +255,18 @@ export default function HockeyCapital() {
                         <td style={{ padding: '8px 8px' }}>{t.stats?.points ?? '—'}</td>
                         <td style={{ padding: '8px 8px' }}>{t.stats?.division_rank ? `#${t.stats.division_rank}` : '—'}</td>
                         <td style={{ padding: '8px 8px', fontSize: 12, color: 'var(--color-text-secondary)' }}>{t.available ?? 100}/100</td>
-                        <td style={{ padding: '8px 8px' }}>
-                          <div style={{ display: 'flex', gap: 4 }}>
-                            <button onClick={() => isAuthenticated ? setTradeModal({ team: t, side: 'buy' }) : setAuthModal('login')}
-                              style={{ padding: '4px 10px', borderRadius: 6, border: 'none', background: '#c0392b', color: 'white', cursor: 'pointer', fontSize: 12, fontWeight: 500 }}>Acheter</button>
-                            {held && held.shares > 0 && (
-                              <button onClick={() => setTradeModal({ team: t, side: 'sell' })}
-                                style={{ padding: '4px 10px', borderRadius: 6, border: '0.5px solid #c0392b', background: 'none', color: '#c0392b', cursor: 'pointer', fontSize: 12 }}>Vendre</button>
-                            )}
-                          </div>
-                        </td>
+                        {isAuthenticated && (
+                          <td style={{ padding: '8px 8px' }}>
+                            <div style={{ display: 'flex', gap: 4 }}>
+                              <button onClick={() => setTradeModal({ team: t, side: 'buy' })}
+                                style={{ padding: '4px 10px', borderRadius: 6, border: 'none', background: '#c0392b', color: 'white', cursor: 'pointer', fontSize: 12, fontWeight: 500 }}>Acheter</button>
+                              {held && held.shares > 0 && (
+                                <button onClick={() => setTradeModal({ team: t, side: 'sell' })}
+                                  style={{ padding: '4px 10px', borderRadius: 6, border: '0.5px solid #c0392b', background: 'none', color: '#c0392b', cursor: 'pointer', fontSize: 12 }}>Vendre</button>
+                              )}
+                            </div>
+                          </td>
+                        )}
                       </tr>
                     );
                   })}
