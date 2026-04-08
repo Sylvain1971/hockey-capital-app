@@ -109,7 +109,7 @@ export default function LeaguePage({ league, token, onBack }) {
                   <div style={S.logo(t.id)}>{t.id}</div>
                   <div style={{ flex:1 }}>
                     <div style={{ fontWeight:600, fontSize:14, color:'#111' }}>{t.name}</div>
-                    <div style={{ fontSize:12, color:'#888' }}>{t.division} · {t.stats?.points || 0}pts · #{t.stats?.division_rank || '—'}</div>
+                    <div style={{ fontSize:12, color:'#888' }}>{t.division} · {t.stats?.points || 0}pts · {'#'}{t.stats?.division_rank || '—'}</div>
                   </div>
                   <div style={{ textAlign:'right', marginRight:12 }}>
                     <div style={{ fontWeight:700, fontSize:15 }}>${(t.price||5).toFixed(2)}</div>

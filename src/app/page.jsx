@@ -264,7 +264,7 @@ export default function HockeyCapital() {
                           </span>
                         </td>
                         <td style={{ padding: '8px 8px' }}>{t.stats?.points ?? '—'}</td>
-                        <td style={{ padding: '8px 8px' }}>{t.stats?.division_rank ? `#${t.stats.division_rank}` : '—'}</td>
+                        <td style={{ padding: '8px 8px' }}>{t.stats?.division_rank ? '#' + t.stats.division_rank : '—'}</td>
                         <td style={{ padding: '8px 8px', fontSize: 12, color: 'var(--color-text-secondary)' }}>{t.available ?? 100}/100</td>
                       </tr>
                       </tr>
