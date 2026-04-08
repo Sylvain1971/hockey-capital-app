@@ -497,7 +497,7 @@ export default function HockeyCapital() {
               <div style={{ display: 'flex', gap: 8 }}>
                 <button type="button" onClick={() => setTradeModal(null)} style={{ flex: 1, padding: 8, borderRadius: 8, border: '0.5px solid var(--color-border-secondary)', background: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--color-text-primary)' }}>Annuler</button>
                 <button type="submit" style={{ flex: 2, padding: 8, borderRadius: 8, border: 'none', background: tradeModal.side === 'buy' ? '#c0392b' : '#1a5276', color: 'white', cursor: 'pointer', fontSize: 13, fontWeight: 500 }}>
-                  Confirmer {tradeModal.side === 'buy' ? 'l'achat' : 'la vente'}
+                  Confirmer {tradeModal.side === 'buy' ? "l'achat" : 'la vente'}
                 </button>
               </div>
             </form>
