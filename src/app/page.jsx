@@ -464,46 +464,48 @@ export default function HockeyCapital() {
 
       {/* ---- MODAL TRADE ---- */}
       {tradeModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ background: 'var(--color-background-primary)', borderRadius: 12, border: '0.5px solid var(--color-border-tertiary)', padding: '1.5rem', width: 400, maxWidth: '95vw' }}>
-            <div style={{ fontSize: 17, fontWeight: 500, marginBottom: '1rem' }}>
-              {tradeModal.side === 'buy' ? 'Acheter' : 'Vendre'} — {tradeModal.team.id}
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '1rem' }}>
-              <div style={{ width: 36, height: 36, borderRadius: '50%', background: TEAM_COLORS[tradeModal.team.id] || '#888', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 500, color: 'white' }}>{tradeModal.team.id}</div>
-              <div>
-                <div style={{ fontWeight: 500 }}>{tradeModal.team.name}</div>
-                <div style={{ fontSize: 12, color: 'var(--color-text-secondary)' }}>Prix actuel: ${(tradeModal.team.price || 5).toFixed(2)}</div>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
+          <div style={{ background: '#ffffff', borderRadius: 16, padding: '24px 20px', width: '100%', maxWidth: 420, boxSizing: 'border-box', boxShadow: '0 20px 60px rgba(0,0,0,0.3)' }}>
+            {/* Header */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ width: 40, height: 40, borderRadius: '50%', background: TEAM_COLORS[tradeModal.team.id] || '#888', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, color: 'white', flexShrink: 0 }}>{tradeModal.team.id}</div>
+                <div>
+                  <div style={{ fontSize: 17, fontWeight: 600, color: '#111' }}>{tradeModal.side === 'buy' ? 'Acheter' : 'Vendre'}</div>
+                  <div style={{ fontSize: 13, color: '#666' }}>{tradeModal.team.name}</div>
+                </div>
               </div>
+              <button type="button" onClick={() => setTradeModal(null)} style={{ background: '#f0f0f0', border: 'none', borderRadius: '50%', width: 32, height: 32, cursor: 'pointer', fontSize: 18, color: '#555', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>×</button>
             </div>
-            {[
-              { label: 'Prix actuel', val: `$${(tradeModal.team.price || 5).toFixed(2)}` },
-              { label: 'Actions disponibles', val: tradeModal.side === 'buy' ? `${tradeModal.team.available ?? 100}` : `${heldTeam?.shares ?? 0} détenues` },
-              { label: 'Vos liquidités', val: `$${(pf?.cash || 0).toFixed(2)}` },
-            ].map(row => (
-              <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, padding: '5px 0', borderBottom: '0.5px solid var(--color-border-tertiary)' }}>
-                <span style={{ color: 'var(--color-text-secondary)' }}>{row.label}</span>
-                <span>{row.val}</span>
-              </div>
-            ))}
-            <form onSubmit={handleTrade} style={{ marginTop: 16 }}>
-              <div style={{ marginBottom: 12 }}>
-                <label style={{ fontSize: 12, color: 'var(--color-text-secondary)', display: 'block', marginBottom: 4 }}>Type d'ordre</label>
-                <select name="orderType" style={{ width: '100%', padding: '7px 10px', border: '0.5px solid var(--color-border-secondary)', borderRadius: 8, background: 'var(--color-background-primary)', color: 'var(--color-text-primary)', fontSize: 13 }}>
+            {/* Infos */}
+            <div style={{ background: '#f7f7f7', borderRadius: 12, padding: '12px 14px', marginBottom: 16 }}>
+              {[
+                { label: 'Prix actuel', val: `$${(tradeModal.team.price || 5).toFixed(2)}` },
+                { label: 'Actions disponibles', val: tradeModal.side === 'buy' ? `${tradeModal.team.available ?? 100}` : `${heldTeam?.shares ?? 0} détenues` },
+                { label: 'Vos liquidités', val: `$${(pf?.cash || 0).toFixed(2)}` },
+              ].map((row, i, arr) => (
+                <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, padding: '6px 0', borderBottom: i < arr.length - 1 ? '1px solid #eee' : 'none' }}>
+                  <span style={{ color: '#666' }}>{row.label}</span>
+                  <span style={{ fontWeight: 500, color: '#111' }}>{row.val}</span>
+                </div>
+              ))}
+            </div>
+            <form onSubmit={handleTrade}>
+              <div style={{ marginBottom: 14 }}>
+                <label style={{ fontSize: 14, fontWeight: 500, color: '#333', display: 'block', marginBottom: 6 }}>Type d'ordre</label>
+                <select name="orderType" style={{ width: '100%', padding: '12px 14px', border: '1.5px solid #ddd', borderRadius: 10, background: '#fff', color: '#111', fontSize: 16, boxSizing: 'border-box' }}>
                   <option value="market">Au marché (exécution immédiate)</option>
                   <option value="limit">Ordre limité</option>
                 </select>
               </div>
-              <div style={{ marginBottom: 12 }}>
-                <label style={{ fontSize: 12, color: 'var(--color-text-secondary)', display: 'block', marginBottom: 4 }}>Quantité</label>
-                <input name="qty" type="number" min={1} defaultValue={1} required style={{ width: '100%', padding: '8px 10px', border: '0.5px solid var(--color-border-secondary)', borderRadius: 8, background: 'var(--color-background-primary)', color: 'var(--color-text-primary)', fontSize: 14 }} />
+              <div style={{ marginBottom: 20 }}>
+                <label style={{ fontSize: 14, fontWeight: 500, color: '#333', display: 'block', marginBottom: 6 }}>Quantité</label>
+                <input name="qty" type="number" min={1} defaultValue={1} required style={{ width: '100%', padding: '12px 14px', border: '1.5px solid #ddd', borderRadius: 10, background: '#fff', color: '#111', fontSize: 16, boxSizing: 'border-box' }} />
               </div>
-              <div style={{ display: 'flex', gap: 8 }}>
-                <button type="button" onClick={() => setTradeModal(null)} style={{ flex: 1, padding: 8, borderRadius: 8, border: '0.5px solid var(--color-border-secondary)', background: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--color-text-primary)' }}>Annuler</button>
-                <button type="submit" style={{ flex: 2, padding: 8, borderRadius: 8, border: 'none', background: tradeModal.side === 'buy' ? '#c0392b' : '#1a5276', color: 'white', cursor: 'pointer', fontSize: 13, fontWeight: 500 }}>
-                  Confirmer {tradeModal.side === 'buy' ? "l'achat" : 'la vente'}
-                </button>
-              </div>
+              <button type="submit" style={{ width: '100%', padding: '14px', borderRadius: 10, border: 'none', background: tradeModal.side === 'buy' ? '#c0392b' : '#1a5276', color: 'white', cursor: 'pointer', fontSize: 16, fontWeight: 600, marginBottom: 10 }}>
+                Confirmer {tradeModal.side === 'buy' ? "l'achat" : 'la vente'}
+              </button>
+              <button type="button" onClick={() => setTradeModal(null)} style={{ width: '100%', padding: '12px', borderRadius: 10, border: '1.5px solid #ddd', background: '#fff', cursor: 'pointer', fontSize: 15, color: '#555' }}>Annuler</button>
             </form>
           </div>
         </div>
