@@ -175,7 +175,7 @@ export default function HockeyCapital() {
               </div>
             ) : (
               <div style={{ background:'#f0f7ff', border:'1px solid #cce0ff', borderRadius:10, padding:'12px 16px', marginBottom:16, display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:8 }}>
-                <div style={{ fontSize:13, color:'#1a4a7a' }}>[>] Marché global -- lecture seule. Pour transiger, ouvrez une ligue dans <strong>Mes Ligues</strong>.</div>
+                <div style={{ fontSize:13, color:'#1a4a7a' }}>Marche Marché global -- lecture seule. Pour transiger, ouvrez une ligue dans <strong>Mes Ligues</strong>.</div>
                 <button onClick={()=>setShowMyLeagues(true)} style={{ padding:'6px 14px', borderRadius:8, border:'none', background:'#c0392b', color:'white', cursor:'pointer', fontSize:13, fontWeight:600 }}>HC Mes Ligues</button>
               </div>
             )}

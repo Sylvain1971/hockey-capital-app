@@ -226,7 +226,7 @@ function Step5({ d, result }) {
         {(d.emails || []).length > 0 && `Invitations envoyées à ${(d.emails || []).length} joueur(s).`}
       </div>
       <div style={{ fontSize:13, color:'#555', marginTop:12 }}>
-        Lien: <strong>hockey-capital-app.vercel.app</strong> -> Rejoindre avec le code
+        Lien: <strong>hockey-capital-app.vercel.app</strong> => Rejoindre avec le code
       </div>
     </div>
   );
@@ -324,9 +324,9 @@ export default function LeagueWizard({ onClose, token }) {
                   <button style={{ ...S.btn, opacity: canNext() ? 1 : 0.5 }}
                     disabled={!canNext()}
                     onClick={() => step === 3 ? submit() : setStep(s => s + 1)}>
-                    {loading ? 'Création...' : step === 3 ? 'Créer la ligue HC' : 'Suivant ->'}
+                    {loading ? 'Création...' : step === 3 ? 'Créer la ligue HC' : 'Suivant =>'}
                   </button>
-                  {step > 0 && <button style={S.btnSec} onClick={() => setStep(s => s - 1)}><- Retour</button>}
+                  {step > 0 && <button style={S.btnSec} onClick={() => setStep(s => s - 1)}>Retour Retour</button>}
                 </>
               ) : null}
             </div>

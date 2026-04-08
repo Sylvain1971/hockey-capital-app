@@ -118,10 +118,10 @@ export default function MyLeagues({ onClose, token, onCreateNew, onOpenLeague })
                     </div>
                     <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
                       <button style={S.btnOpen} onClick={() => handleOpenLeague(lg)}>
-                        -> Ouvrir la ligue
+                        => Ouvrir la ligue
                       </button>
                       <button style={S.btnCopy} onClick={() => { navigator.clipboard?.writeText(lg.invite_code); setMsg('Code copié!'); setTimeout(() => setMsg(''), 2000); }}>
-                        [copy] {lg.invite_code}
+                        Code {lg.invite_code}
                       </button>
                       {lg.is_creator && (
                         confirmDelete === lg.id
@@ -130,7 +130,7 @@ export default function MyLeagues({ onClose, token, onCreateNew, onOpenLeague })
                               <button style={{ ...S.btnDanger, background:'#e74c3c', color:'#fff' }} onClick={() => deleteLeague(lg.id)}>Oui</button>
                               <button style={S.btnCopy} onClick={() => setConfirmDelete(null)}>Non</button>
                             </div>
-                          : <button style={S.btnDanger} onClick={() => setConfirmDelete(lg.id)}>[X] Supprimer</button>
+                          : <button style={S.btnDanger} onClick={() => setConfirmDelete(lg.id)}>Suppr. Supprimer</button>
                       )}
                     </div>
                   </div>
