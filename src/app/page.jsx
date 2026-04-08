@@ -139,8 +139,8 @@ export default function HockeyCapital() {
             {[
               {label:'Capitalisation', value:Math.round(totalMarketCap/1_000_000).toLocaleString('fr-CA')+' M$', sub:'32 équipes LNH'},
               {label:'Prix moyen', value:'$'+fmt(teams.length?teams.reduce((s,t)=>s+(t.price||25),0)/teams.length:25), sub:'par action'},
-              {label:'Meilleur gain', value:teamsWithChange.length?('+'+Math.max(...teamsWithChange.map(t=>t.changePct||0)).toFixed(2)+'%'):'—', sub:teamsWithChange.length?teamsWithChange.reduce((b,t)=>(t.changePct||0)>(b.changePct||0)?t:b,teamsWithChange[0])?.id:'—', up:true},
-              {label:'Plus grande baisse', value:teamsWithChange.length?(Math.min(...teamsWithChange.map(t=>t.changePct||0)).toFixed(2)+'%'):'—', sub:teamsWithChange.length?teamsWithChange.reduce((w,t)=>(t.changePct||0)<(w.changePct||0)?t:w,teamsWithChange[0])?.id:'—', down:true},
+              {label:'Meilleur gain', value:(()=>{const v=teamsWithChange.filter(t=>(t.changePct||0)>0);return v.length?('+'+Math.max(...v.map(t=>t.changePct)).toFixed(2)+'%'):'—'})(), sub:(()=>{const v=teamsWithChange.filter(t=>(t.changePct||0)>0);return v.length?v.reduce((b,t)=>t.changePct>b.changePct?t:b,v[0])?.id:'—'})(), up:true},
+              {label:'Plus grande baisse', value:(()=>{const v=teamsWithChange.filter(t=>(t.changePct||0)<0);return v.length?(Math.min(...v.map(t=>t.changePct)).toFixed(2)+'%'):'—'})(), sub:(()=>{const v=teamsWithChange.filter(t=>(t.changePct||0)<0);return v.length?v.reduce((w,t)=>t.changePct<w.changePct?t:w,v[0])?.id:'—'})(), down:true},
             ].map((m,i)=>(
               <div key={i} style={{ background:'var(--color-background-secondary)', borderRadius:8, padding:'12px 14px' }}>
                 <div style={{ fontSize:11, color:'var(--color-text-secondary)', marginBottom:3 }}>{m.label}</div>
