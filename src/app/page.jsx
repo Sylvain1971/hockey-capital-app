@@ -118,14 +118,11 @@ export default function HockeyCapital() {
         <div style={{ marginLeft: 'auto', display: 'flex', gap: 8, alignItems: 'center' }}>
           {isAuthenticated ? (
             <>
-              <div style={{ background: 'var(--color-background-secondary)', borderRadius: 8, padding: '7px 14px', fontSize: 13 }}>
-                Liquidites: <strong>{'$'}{pf?.cash?.toFixed(2) ?? '-'}</strong>
+              <div style={{ background: 'var(--color-background-secondary)', borderRadius: 8, padding: '7px 14px', fontSize: 13 }}Liquidites: <strong>{'$'}{pf?.cash?.toFixed(2) ?? '-'}</strong>
               </div>
-              <button onClick={() => setShowMyLeagues(true)} style={{ padding: '6px 14px', borderRadius: 8, border: '0.5px solid #c0392b', background: 'none', cursor: 'pointer', fontSize: 13, color: '#c0392b', fontWeight: 500 }}>
-                HC Mes Ligues
+              <button onClick={() => setShowMyLeagues(true)} style={{ padding: '6px 14px', borderRadius: 8, border: '0.5px solid #c0392b', background: 'none', cursor: 'pointer', fontSize: 13, color: '#c0392b', fontWeight: 500 }}HC Mes Ligues
               </button>
-              <button onClick={logout} style={{ padding: '6px 14px', borderRadius: 8, border: '0.5px solid var(--color-border-secondary)', background: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--color-text-primary)' }}>
-                Deconnexion
+              <button onClick={logout} style={{ padding: '6px 14px', borderRadius: 8, border: '0.5px solid var(--color-border-secondary)', background: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--color-text-primary)' }}Deconnexion
               </button>
             </>
           ) : (
@@ -213,8 +210,7 @@ export default function HockeyCapital() {
             {/* Banniere contextuelle */}
             {!isAuthenticated ? (
               <div style={{ background:'#fff8f0', border:'1px solid #f0d080', borderRadius:10, padding:'12px 16px', marginBottom:16, display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:8 }}>
-                <div style={{ fontSize:13, color:'#7a5800' }}>
-                  HC <strong>Hockey Capital</strong> - Connectez-vous pour rejoindre une ligue et investir dans vos equipes LNH.
+                <div style={{ fontSize:13, color:'#7a5800' }}HC <strong>Hockey Capital</strong> - Connectez-vous pour rejoindre une ligue et investir dans vos equipes LNH.
                 </div>
                 <div style={{ display:'flex', gap:8 }}>
                   <button onClick={() => setAuthModal('login')} style={{ padding:'6px 14px', borderRadius:8, border:'1px solid #c0392b', background:'none', color:'#c0392b', cursor:'pointer', fontSize:13, fontWeight:500 }}>Connexion</button>
@@ -223,11 +219,9 @@ export default function HockeyCapital() {
               </div>
             ) : (
               <div style={{ background:'#f0f7ff', border:'1px solid #cce0ff', borderRadius:10, padding:'12px 16px', marginBottom:16, display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:8 }}>
-                <div style={{ fontSize:13, color:'#1a4a7a' }}>
-                   Ceci est le marche global en lecture seule. Pour acheter et vendre, allez dans <strong>Mes Ligues</strong> et selectionnez votre ligue.
+                <div style={{ fontSize:13, color:'#1a4a7a' }}Ceci est le marche global en lecture seule. Pour acheter et vendre, allez dans <strong>Mes Ligues</strong> et selectionnez votre ligue.
                 </div>
-                <button onClick={() => setShowMyLeagues(true)} style={{ padding:'6px 14px', borderRadius:8, border:'none', background:'#c0392b', color:'white', cursor:'pointer', fontSize:13, fontWeight:600 }}>
-                  HC Mes Ligues
+                <button onClick={() => setShowMyLeagues(true)} style={{ padding:'6px 14px', borderRadius:8, border:'none', background:'#c0392b', color:'white', cursor:'pointer', fontSize:13, fontWeight:600 }}HC Mes Ligues
                 </button>
               </div>
             )}
@@ -468,8 +462,7 @@ export default function HockeyCapital() {
                 <input name="password" type="password" required minLength={8} placeholder="8 caracteres minimum" style={{ width: '100%', padding: '12px 14px', border: '1.5px solid #ddd', borderRadius: 10, background: '#fff', color: '#111', fontSize: 16, boxSizing: 'border-box', outline: 'none' }} />
               </div>
               {authModal === 'register' && (
-                <div style={{ fontSize: 13, color: '#555', marginBottom: 16, background: '#f5f9ff', borderRadius: 10, padding: '10px 14px', border: '1px solid #dce8ff' }}>
-                   Capital de depart: <strong style={{ color: '#c0392b' }}>$2 500.00</strong> - chaque joueur commence avec le meme capital
+                <div style={{ fontSize: 13, color: '#555', marginBottom: 16, background: '#f5f9ff', borderRadius: 10, padding: '10px 14px', border: '1px solid #dce8ff' }}Capital de depart: <strong style={{ color: '#c0392b' }}>$2 500.00</strong> - chaque joueur commence avec le meme capital
                 </div>
               )}
               <button type="submit" style={{ width: '100%', padding: '14px', borderRadius: 10, border: 'none', background: '#c0392b', color: 'white', cursor: 'pointer', fontSize: 16, fontWeight: 600, marginBottom: 12 }}>
@@ -527,8 +520,7 @@ export default function HockeyCapital() {
                 <label style={{ fontSize: 14, fontWeight: 500, color: '#333', display: 'block', marginBottom: 6 }}>Quantite</label>
                 <input name="qty" type="number" min={1} defaultValue={1} required style={{ width: '100%', padding: '12px 14px', border: '1.5px solid #ddd', borderRadius: 10, background: '#fff', color: '#111', fontSize: 16, boxSizing: 'border-box' }} />
               </div>
-              <button type="submit" style={{ width: '100%', padding: '14px', borderRadius: 10, border: 'none', background: tradeModal.side === 'buy' ? '#c0392b' : '#1a5276', color: 'white', cursor: 'pointer', fontSize: 16, fontWeight: 600, marginBottom: 10 }}>
-                Confirmer {tradeModal.side === 'buy' ? "l'achat" : 'la vente'}
+              <button type="submit" style={{ width: '100%', padding: '14px', borderRadius: 10, border: 'none', background: tradeModal.side === 'buy' ? '#c0392b' : '#1a5276', color: 'white', cursor: 'pointer', fontSize: 16, fontWeight: 600, marginBottom: 10 }}Confirmer {tradeModal.side === 'buy' ? "l'achat" : 'la vente'}
               </button>
               <button type="button" onClick={() => setTradeModal(null)} style={{ width: '100%', padding: '12px', borderRadius: 10, border: '1.5px solid #ddd', background: '#fff', cursor: 'pointer', fontSize: 15, color: '#555' }}>Annuler</button>
             </form>

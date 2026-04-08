@@ -222,14 +222,12 @@ export default function LeaguePage({ league, token, onBack }) {
               ))}
             </div>
             <input type="number" min={1} value={qty} onChange={e => setQty(parseInt(e.target.value)||1)} style={S.inp} placeholder="Ou entrez une quantite..." />
-            <div style={{ fontSize:13, color:'#888', marginTop:8, padding:'8px 12px', background:'#f0f7ff', borderRadius:8 }}>
-              Total estime: <strong>{'$'}{((tradeModal.team.price||25) * qty).toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}</strong>
+            <div style={{ fontSize:13, color:'#888', marginTop:8, padding:'8px 12px', background:'#f0f7ff', borderRadius:8 }}Total estime: <strong>{'$'}{((tradeModal.team.price||25) * qty).toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}</strong>
               {tradeModal.side === 'buy' && cash < (tradeModal.team.price||25) * qty && (
                 <span style={{ color:'#c0392b', marginLeft:8 }}>(!) Liquidites insuffisantes</span>
               )}
             </div>
-            <button style={S.btnFull(tradeModal.side==='buy'?'#c0392b':'#1a5276')} onClick={executeTrade}>
-              Confirmer {tradeModal.side==='buy'?"l'achat":'la vente'}
+            <button style={S.btnFull(tradeModal.side==='buy'?'#c0392b':'#1a5276')} onClick={executeTrade}Confirmer {tradeModal.side==='buy'?"l'achat":'la vente'}
             </button>
             <button style={{ ...S.btnFull('#f0f0f0'), color:'#555', marginTop:8 }} onClick={() => setTradeModal(null)}>Annuler</button>
           </div>
