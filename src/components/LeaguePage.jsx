@@ -35,7 +35,7 @@ export default function LeaguePage({ league, token, onBack }) {
   const [members, setMembers] = useState([]);
   const [tab, setTab] = useState('marche');
   const [tradeModal, setTradeModal] = useState(null);
-  const [qty, setQty] = useState(1);
+  const [qty, setQty] = useState(100);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState('');
 
@@ -116,9 +116,9 @@ export default function LeaguePage({ league, token, onBack }) {
                     {held && held.shares > 0 && <div style={{ fontSize:11, color:'#27ae60' }}>{held.shares} détenues</div>}
                   </div>
                   <div style={{ display:'flex', gap:6 }}>
-                    <button style={S.btnBuy} onClick={() => { setTradeModal({ team:t, side:'buy' }); setQty(1); }}>Acheter</button>
+                    <button style={S.btnBuy} onClick={() => { setTradeModal({ team:t, side:'buy' }); setQty(100); }}>Acheter</button>
                     {held && held.shares > 0 && (
-                      <button style={S.btnSell} onClick={() => { setTradeModal({ team:t, side:'sell' }); setQty(1); }}>Vendre</button>
+                      <button style={S.btnSell} onClick={() => { setTradeModal({ team:t, side:'sell' }); setQty(100); }}>Vendre</button>
                     )}
                   </div>
                 </div>
@@ -203,19 +203,30 @@ export default function LeaguePage({ league, token, onBack }) {
             </div>
             <div style={{ background:'#f7f7f7', borderRadius:10, padding:'12px 14px', marginBottom:16 }}>
               {[
-                ['Prix actuel', `$${(tradeModal.team.price||5).toFixed(2)}`],
-                ['Vos liquidités', `$${cash.toFixed(2)}`],
-                ['Actions disponibles', `${tradeModal.team.available ?? 100}`],
+                ['Prix actuel', ('$') + (tradeModal.team.price||25).toFixed(2)],
+                ['Variation (veille)', (tradeModal.team.changePct >= 0 ? '+' : '') + (tradeModal.team.changePct||0).toFixed(2) + '%'],
+                ['Vos liquidités', ('$') + cash.toFixed(2)],
               ].map(([l,v]) => (
                 <div key={l} style={{ display:'flex', justifyContent:'space-between', fontSize:14, padding:'5px 0', borderBottom:'1px solid #eee' }}>
                   <span style={{ color:'#666' }}>{l}</span><span style={{ fontWeight:600 }}>{v}</span>
                 </div>
               ))}
             </div>
-            <label style={{ fontSize:14, fontWeight:600, color:'#333' }}>Quantité</label>
-            <input type="number" min={1} value={qty} onChange={e => setQty(e.target.value)} style={S.inp} />
-            <div style={{ fontSize:13, color:'#888', marginTop:6 }}>
-              Total estimé: <strong>{'$'}{((tradeModal.team.price||5) * qty).toFixed(2)}</strong>
+            <label style={{ fontSize:14, fontWeight:600, color:'#333' }}>Lot (actions)</label>
+            <div style={{ display:'flex', gap:6, marginTop:6, marginBottom:8, flexWrap:'wrap' }}>
+              {[100, 500, 1000, 5000, 10000].map(n => (
+                <button key={n} onClick={() => setQty(n)}
+                  style={{ padding:'6px 12px', borderRadius:8, border: qty === n ? 'none' : '1px solid #ddd', background: qty === n ? '#c0392b' : '#f8f8f8', color: qty === n ? '#fff' : '#555', fontSize:13, cursor:'pointer', fontWeight: qty === n ? 700 : 400 }}>
+                  {n.toLocaleString()}
+                </button>
+              ))}
+            </div>
+            <input type="number" min={1} value={qty} onChange={e => setQty(parseInt(e.target.value)||1)} style={S.inp} placeholder="Ou entrez une quantité..." />
+            <div style={{ fontSize:13, color:'#888', marginTop:8, padding:'8px 12px', background:'#f0f7ff', borderRadius:8 }}>
+              Total estimé: <strong>{'$'}{((tradeModal.team.price||25) * qty).toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}</strong>
+              {tradeModal.side === 'buy' && cash < (tradeModal.team.price||25) * qty && (
+                <span style={{ color:'#c0392b', marginLeft:8 }}>⚠ Liquidités insuffisantes</span>
+              )}
             </div>
             <button style={S.btnFull(tradeModal.side==='buy'?'#c0392b':'#1a5276')} onClick={executeTrade}>
               Confirmer {tradeModal.side==='buy'?"l'achat":'la vente'}

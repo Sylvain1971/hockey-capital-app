@@ -16,10 +16,10 @@ const TEAM_COLORS = {
 
 function fmt(n) { return Number(n || 0).toFixed(2); }
 function fmtM(n) {
-  if (n >= 1e12) return Math.round(n / 1e9).toLocaleString() + 'B';
-  if (n >= 1e9) return Math.round(n / 1e9).toLocaleString() + 'B';
-  if (n >= 1e6) return Math.round(n / 1e6).toLocaleString() + 'M';
-  return Math.round(n).toLocaleString();
+  if (n >= 1e12) return (n / 1e12).toFixed(1) + ' T$';
+  if (n >= 1e9)  return (n / 1e9).toFixed(1)  + ' G$';
+  if (n >= 1e6)  return Math.round(n / 1e6).toLocaleString('fr-CA') + ' M$';
+  return Math.round(n).toLocaleString('fr-CA');
 }
 
 export default function HockeyCapital() {
@@ -129,7 +129,7 @@ export default function HockeyCapital() {
       {/* TICKER */}
       <div style={{ background:'var(--color-background-secondary)', borderRadius:8, padding:'7px 12px', marginBottom:'1rem', overflow:'hidden', whiteSpace:'nowrap', fontSize:12 }}>
         {teams.slice(0,16).map(t => {
-          const ch = t.lastChange || 0;
+          const ch = t.changePct || 0;
           return (
             <span key={t.id} style={{ marginRight:28, display:'inline-block' }}>
               <strong>{t.id}</strong>{' '}{'$'}{(t.price||25).toFixed(2)}{' '}
