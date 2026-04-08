@@ -144,12 +144,12 @@ export default function HockeyCapital() {
       {/* TABS */}
       <div style={{ display:'flex', gap:4, marginBottom:'1.5rem', borderBottom:'0.5px solid var(--color-border-tertiary)' }}>
         {[
-          { key:'market', label:'Marché' },
-          { key:'portfolio', label:'Portefeuille' },
-          { key:'orders', label:'Mes ordres' + (activeOrders.length ? ' (' + activeOrders.length + ')' : '') },
-          { key:'impact', label:'Impact LNH' },
-          { key:'dividends', label:'Dividendes' },
-        ].map(tab => (
+          { key:'market', label:'Marché', always: true },
+          { key:'impact', label:'Impact LNH', always: true },
+          { key:'portfolio', label:'Portefeuille', auth: true },
+          { key:'orders', label:'Mes ordres' + (activeOrders.length ? ' (' + activeOrders.length + ')' : ''), auth: true },
+          { key:'dividends', label:'Dividendes', auth: true },
+        ].filter(tab => tab.always || (tab.auth && isAuthenticated)).map(tab => (
           <button key={tab.key} onClick={() => setActiveTab(tab.key)}
             style={{ padding:'8px 14px', fontSize:13, cursor:'pointer', border:'none', background:'none', color:activeTab===tab.key?'var(--color-text-primary)':'var(--color-text-secondary)', borderBottom:activeTab===tab.key?'2px solid #c0392b':'2px solid transparent', marginBottom:-1, fontWeight:activeTab===tab.key?500:400, borderRadius:'8px 8px 0 0' }}>
             {tab.label}
@@ -163,10 +163,10 @@ export default function HockeyCapital() {
           {/* Stats */}
           <div style={{ display:'grid', gridTemplateColumns:'repeat(4,minmax(0,1fr))', gap:10, marginBottom:'1.5rem' }}>
             {[
-              { label:'Capitalisation totale', value:'$' + fmtM(totalMarketCap), sub:'32 équipes LNH' },
+              { label:'Capitalisation totale', value: Math.round(totalMarketCap/1_000_000).toLocaleString('fr-CA') + ' M$', sub:'32 équipes LNH' },
               { label:'Prix moyen', value:'$' + (teams.length ? fmt(teams.reduce((s,t)=>s+(t.price||25),0)/teams.length) : '25.00'), sub:'par action' },
-              { label:'Meilleur gain', value:teams.length?('+'+Math.max(...teams.map(t=>t.lastChange||0)).toFixed(2)+'%'):'—', sub:teams.length?teams.reduce((b,t)=>(t.lastChange||0)>(b.lastChange||0)?t:b,teams[0])?.id:'—', up:true },
-              { label:'Plus grande baisse', value:teams.length?(Math.min(...teams.map(t=>t.lastChange||0)).toFixed(2)+'%'):'—', sub:teams.length?teams.reduce((w,t)=>(t.lastChange||0)<(w.lastChange||0)?t:w,teams[0])?.id:'—', down:true },
+              { label:'Meilleur gain', value:teams.length?('+'+Math.max(...teams.map(t=>t.changePct||0)).toFixed(2)+'%'):'—', sub:teams.length?teams.reduce((b,t)=>(t.changePct||0)>(b.changePct||0)?t:b,teams[0])?.id:'—', up:true },
+              { label:'Plus grande baisse', value:teams.length?(Math.min(...teams.map(t=>t.changePct||0)).toFixed(2)+'%'):'—', sub:teams.length?teams.reduce((w,t)=>(t.changePct||0)<(w.changePct||0)?t:w,teams[0])?.id:'—', down:true },
             ].map((m,i) => (
               <div key={i} style={{ background:'var(--color-background-secondary)', borderRadius:8, padding:'12px 14px' }}>
                 <div style={{ fontSize:11, color:'var(--color-text-secondary)', marginBottom:3 }}>{m.label}</div>
@@ -223,7 +223,7 @@ export default function HockeyCapital() {
                   {mktLoading ? (
                     <tr><td colSpan={6} style={{ textAlign:'center', padding:40, color:'var(--color-text-secondary)' }}>Chargement...</td></tr>
                   ) : filteredTeams.map(t => {
-                    const ch = t.lastChange || 0;
+                    const ch = t.changePct || 0;
                     const price = t.price || 25;
                     return (
                       <tr key={t.id} style={{ borderBottom:'0.5px solid var(--color-border-tertiary)' }}
