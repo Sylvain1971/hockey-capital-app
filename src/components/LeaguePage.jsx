@@ -78,6 +78,23 @@ export default function LeaguePage({ league, token, onBack }) {
 
   const positions = portfolio?.positions || [];
   const cash = portfolio?.cash || 0;
+  const totalValue = portfolio?.totalValue || cash;
+
+  // Calcul concentration pour l'équipe du modal
+  function getConcentration(teamId, addQty, addPrice) {
+    const held = positions.find(p => p.team_id === teamId);
+    const currentShares = held?.shares || 0;
+    const newShares = currentShares + addQty;
+    const newPositionValue = newShares * addPrice;
+    const newTotal = totalValue - (currentShares * addPrice) + newPositionValue;
+    return newTotal > 0 ? newPositionValue / newTotal : 0;
+  }
+
+  function getNbEquipes(includeTeamId) {
+    const ids = new Set(positions.filter(p => p.shares > 0).map(p => p.team_id));
+    ids.add(includeTeamId);
+    return ids.size;
+  }
 
   return (
     <div style={S.overlay}>
@@ -223,11 +240,36 @@ export default function LeaguePage({ league, token, onBack }) {
             </div>
             <input type="number" min={1} value={qty} onChange={e => setQty(parseInt(e.target.value)||1)} style={S.inp} placeholder="Ou entrez une quantite..." />
             <div style={{ fontSize:13, color:'#888', marginTop:8, padding:'8px 12px', background:'#f0f7ff', borderRadius:8 }}>
-              Total estime: <strong>{'$'}{((tradeModal.team.price||25) * qty).toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}</strong>
+              Total estimé: <strong>{'$'}{((tradeModal.team.price||25) * qty).toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}</strong>
               {tradeModal.side === 'buy' && cash < (tradeModal.team.price||25) * qty && (
-                <span style={{ color:'#c0392b', marginLeft:8 }}>(!) Liquidites insuffisantes</span>
+                <span style={{ color:'#c0392b', marginLeft:8 }}>(!) Liquidités insuffisantes</span>
               )}
             </div>
+
+            {/* Avertissements de concentration */}
+            {tradeModal.side === 'buy' && (() => {
+              const conc = getConcentration(tradeModal.team.id, qty, tradeModal.team.price || 25);
+              const nb = getNbEquipes(tradeModal.team.id);
+              const over40 = conc > 0.40;
+              const over25need3 = conc > 0.25 && nb < 3;
+              const warn = conc > 0.25 && !over40;
+              if (!over40 && !over25need3 && !warn) return null;
+              return (
+                <div style={{ marginTop:8, padding:'10px 12px', borderRadius:8, background: over40 || over25need3 ? '#fff0f0' : '#fffbe6', border: `1px solid ${over40 || over25need3 ? '#c0392b' : '#f0c040'}` }}>
+                  <div style={{ fontSize:12, fontWeight:700, color: over40 || over25need3 ? '#c0392b' : '#7a5800', marginBottom:4 }}>
+                    {over40 ? '🚫 Limite de concentration dépassée (40% max)' :
+                     over25need3 ? '🚫 Diversification requise (3 équipes min pour >25%)' :
+                     '⚠️ Concentration élevée'}
+                  </div>
+                  <div style={{ fontSize:12, color:'#555' }}>
+                    Cette position représentera <strong style={{ color: over40 ? '#c0392b' : over25need3 ? '#c0392b' : '#7a5800' }}>{Math.round(conc * 100)}%</strong> de votre portefeuille.
+                    {over40 && ' Maximum permis: 40%.'}
+                    {over25need3 && ` Vous avez ${nb} équipe(s). Il en faut au moins 3 pour dépasser 25%.`}
+                    {warn && ' Pensez à diversifier.'}
+                  </div>
+                </div>
+              );
+            })()}
             <button style={S.btnFull(tradeModal.side==='buy'?'#c0392b':'#1a5276')} onClick={executeTrade}>
               Confirmer {tradeModal.side==='buy'?"l'achat":'la vente'}
             </button>
