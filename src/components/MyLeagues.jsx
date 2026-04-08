@@ -110,13 +110,15 @@ export default function MyLeagues({ onClose, token, onCreateNew, onOpenLeague })
                           {lg.max_players} joueurs . {lg.duration} . Code: <strong style={{ letterSpacing:1 }}>{lg.invite_code}</strong>
                           {lg.is_creator && <span style={{ marginLeft:8, padding:'1px 8px', borderRadius:10, background:'#fff0f0', color:'#c0392b', fontSize:11, fontWeight:600 }}>Createur</span>}
                         </div>
-                        <div style={{ fontSize:12, color:'#666', marginTop:2 }}Mise: <strong>{lg.mise_reelle}$</strong> . Capital: <strong>{(lg.capital_virtuel||0).toLocaleString()}$</strong>
+                        <div style={{ fontSize:12, color:'#666', marginTop:2 }}>
+                          Mise: <strong>{lg.mise_reelle}$</strong> . Capital: <strong>{(lg.capital_virtuel||0).toLocaleString()}$</strong>
                         </div>
                       </div>
                       <span style={S.badge(lg.status)}>{STATUS_LABEL[lg.status] || lg.status}</span>
                     </div>
                     <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
-                      <button style={S.btnOpen} onClick={() => handleOpenLeague(lg)}>Ouvrir la ligue
+                      <button style={S.btnOpen} onClick={() => handleOpenLeague(lg)}>
+                        Ouvrir la ligue
                       </button>
                       <button style={S.btnCopy} onClick={() => { navigator.clipboard?.writeText(lg.invite_code); setMsg('Code copie!'); setTimeout(() => setMsg(''), 2000); }}>
                          {lg.invite_code}
@@ -128,7 +130,7 @@ export default function MyLeagues({ onClose, token, onCreateNew, onOpenLeague })
                               <button style={{ ...S.btnDanger, background:'#e74c3c', color:'#fff' }} onClick={() => deleteLeague(lg.id)}>Oui</button>
                               <button style={S.btnCopy} onClick={() => setConfirmDelete(null)}>Non</button>
                             </div>
-                          : <button style={S.btnDanger} onClick={() => setConfirmDelete(lg.id)}>Supprimer</button>
+                          : <button style={S.btnDanger} onClick={() => setConfirmDelete(lg.id)}> Supprimer</button>
                       )}
                     </div>
                   </div>

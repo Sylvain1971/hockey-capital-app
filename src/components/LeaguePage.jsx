@@ -87,13 +87,13 @@ export default function LeaguePage({ league, token, onBack }) {
           <div style={{ fontWeight:700, fontSize:17, color:'#111' }}>{league.name}</div>
           <div style={{ fontSize:12, color:'#888' }}>Code: <strong>{league.invite_code}</strong> . {league.max_players} joueurs . {league.duration}</div>
         </div>
-        <div style={{ fontSize:14, fontWeight:600, color:'#111' }}> {cash.toFixed(2)}$</div>
+        <div style={{ fontSize:14, fontWeight:600, color:'#111' }}>[$] {cash.toFixed(2)}$</div>
       </div>
 
       <div style={S.body}>
         {/* Tabs */}
         <div style={{ display:'flex', gap:0, marginBottom:16, border:'1px solid #eee', borderRadius:10, overflow:'hidden', background:'#f8f8f8' }}>
-          {[['marche',' Marche'],['portefeuille',' Portefeuille'],['classement',' Classement']].map(([id, lbl]) => (
+          {[['marche','Marche Marche'],['portefeuille','[P] Portefeuille'],['classement','[C] Classement']].map(([id, lbl]) => (
             <button key={id} onClick={() => setTab(id)} style={{ flex:1, padding:'10px 0', border:'none', background: tab===id?'#c0392b':'none', color: tab===id?'#fff':'#555', fontWeight: tab===id?700:400, cursor:'pointer', fontSize:13 }}>{lbl}</button>
           ))}
         </div>
@@ -222,12 +222,14 @@ export default function LeaguePage({ league, token, onBack }) {
               ))}
             </div>
             <input type="number" min={1} value={qty} onChange={e => setQty(parseInt(e.target.value)||1)} style={S.inp} placeholder="Ou entrez une quantite..." />
-            <div style={{ fontSize:13, color:'#888', marginTop:8, padding:'8px 12px', background:'#f0f7ff', borderRadius:8 }}Total estime: <strong>{'$'}{((tradeModal.team.price||25) * qty).toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}</strong>
+            <div style={{ fontSize:13, color:'#888', marginTop:8, padding:'8px 12px', background:'#f0f7ff', borderRadius:8 }}>
+              Total estime: <strong>{'$'}{((tradeModal.team.price||25) * qty).toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}</strong>
               {tradeModal.side === 'buy' && cash < (tradeModal.team.price||25) * qty && (
                 <span style={{ color:'#c0392b', marginLeft:8 }}>(!) Liquidites insuffisantes</span>
               )}
             </div>
-            <button style={S.btnFull(tradeModal.side==='buy'?'#c0392b':'#1a5276')} onClick={executeTrade}Confirmer {tradeModal.side==='buy'?"l'achat":'la vente'}
+            <button style={S.btnFull(tradeModal.side==='buy'?'#c0392b':'#1a5276')} onClick={executeTrade}>
+              Confirmer {tradeModal.side==='buy'?"l'achat":'la vente'}
             </button>
             <button style={{ ...S.btnFull('#f0f0f0'), color:'#555', marginTop:8 }} onClick={() => setTradeModal(null)}>Annuler</button>
           </div>

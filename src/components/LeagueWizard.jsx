@@ -54,7 +54,7 @@ function Step1({ d, set }) {
       <div style={S.half}>
         <label style={S.lbl}>Nombre de joueurs</label>
         <select style={S.sel} value={d.players} onChange={e => set('players', parseInt(e.target.value))}>
-          {[1,2,3,4,5,6,7,8,10,12,15,20].map(n => <option key={n} value={n}>{n === 1 ? '1 joueur (solo)' : n + ' joueurs'}</option>)}
+          {[2,3,4,5,6,7,8,10,12,15,20].map(n => <option key={n} value={n}>{n} joueurs</option>)}
         </select>
       </div>
       <div style={S.half}>
@@ -207,7 +207,8 @@ function Step4({ d, set }) {
         ))
       }
     </div>
-    <div style={{ background:'#fffbf0', border:'1px solid #f0d080', borderRadius:10, padding:'10px 14px', fontSize:13, color:'#7a5800' }}Les joueurs invites pourront s'inscrire avec leur email et rejoindre automatiquement votre ligue.
+    <div style={{ background:'#fffbf0', border:'1px solid #f0d080', borderRadius:10, padding:'10px 14px', fontSize:13, color:'#7a5800' }}>
+       Les joueurs invites pourront s'inscrire avec leur email et rejoindre automatiquement votre ligue.
     </div>
   </>;
 }
@@ -223,7 +224,8 @@ function Step5({ d, result }) {
       <div style={{ fontSize:13, color:'#888' }}>
         {(d.emails || []).length > 0 && `Invitations envoyees a ${(d.emails || []).length} joueur(s).`}
       </div>
-      <div style={{ fontSize:13, color:'#555', marginTop:12 }}Lien: <strong>hockey-capital-app.vercel.app</strong>Rejoindre avec le code
+      <div style={{ fontSize:13, color:'#555', marginTop:12 }}>
+        Lien: <strong>hockey-capital-app.vercel.app</strong> > Rejoindre avec le code
       </div>
     </div>
   );
