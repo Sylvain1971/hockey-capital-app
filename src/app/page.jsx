@@ -258,10 +258,10 @@ export default function HockeyCapital() {
                 <thead>
                   <tr style={{ background: 'var(--color-background-secondary)' }}>
                     {[
-                      { label: 'Équipe', width: '31%' },
+                      { label: 'Équipe', width: '32%' },
                       { label: 'Division', width: '13%' },
                       { label: 'Prix', width: '13%' },
-                      { label: 'Variation $ / %', width: '20%' },
+                      { label: 'Dernier match', width: '20%' },
                       { label: 'Pts LNH', width: '11%' },
                       { label: 'Rang div.', width: '12%' },
                     ].map(h => (
@@ -304,7 +304,7 @@ export default function HockeyCapital() {
                           </span>
                         </td>
                         {/* Prix */}
-                        <td style={{ padding: '10px 14px', fontWeight: 700, fontSize: 16, color: 'var(--color-text-primary)' }}>
+                        <td style={{ padding: '12px 14px', fontWeight: 700, fontSize: 16, color: 'var(--color-text-primary)' }}>
                           ${price.toFixed(2)}
                         </td>
                         {/* Variation */}
@@ -312,7 +312,7 @@ export default function HockeyCapital() {
                           {hasChange ? (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 16, fontWeight: 800, letterSpacing: '-0.02em', color: ch > 0 ? '#1e8449' : ch < 0 ? '#c0392b' : 'var(--color-text-secondary)' }}>
-                                {ch > 0 ? '▲' : ch < 0 ? '▼' : ''}{' '}{ch >= 0 ? '+' : ''}{t.changeDollar !== undefined ? Math.abs(t.changeDollar).toFixed(2) : (price * Math.abs(ch) / 100).toFixed(2)}$
+                                {ch > 0 ? '▲' : ch < 0 ? '▼' : ''}{' '}{t.changeDollar !== undefined ? (t.changeDollar >= 0 ? '+' : '') + Math.abs(t.changeDollar).toFixed(2) : (ch >= 0 ? '+' : '') + (price * Math.abs(ch) / 100).toFixed(2)}$
                               </span>
                               <span style={{ fontSize: 12, fontWeight: 600, color: ch > 0 ? '#27ae60' : ch < 0 ? '#c0392b' : 'var(--color-text-secondary)', paddingLeft: 2, opacity: 0.8 }}>
                                 {ch >= 0 ? '+' : ''}{ch.toFixed(2)}%
@@ -454,7 +454,7 @@ export default function HockeyCapital() {
         <div style={{ background: 'var(--color-background-primary)', border: '0.5px solid var(--color-border-tertiary)', borderRadius: 12, padding: '1rem 1.25rem' }}>
           <div style={{ fontSize: 14, fontWeight: 500, marginBottom: 12 }}>Journal d'impact - resultats LNH et prix (VERSION INITIALE)</div>
           {impactLog.length === 0 ? (
-            <div style={{ color: 'var(--color-text-secondary)', fontSize: 13, textAlign: 'center', padding: 40 }}>En attente de resultats LNH...</div>
+            <div style={{ color: 'var(--color-text-secondary)', fontSize: 15, textAlign: 'center', padding: 40 }}>En attente de resultats LNH...</div>
           ) : impactLog.map((entry, i) => {
             const ch = parseFloat(entry.pct_change || 0);
             const t = teams.find(x => x.id === entry.team_id);
