@@ -258,10 +258,10 @@ export default function HockeyCapital() {
                 <thead>
                   <tr style={{ background: 'var(--color-background-secondary)' }}>
                     {[
-                      { label: 'Équipe', width: '35%' },
-                      { label: 'Division', width: '18%' },
+                      { label: 'Équipe', width: '29%' },
+                      { label: 'Division', width: '15%' },
                       { label: 'Prix', width: '12%' },
-                      { label: 'Variation', width: '12%' },
+                      { label: 'Variation $ / %', width: '18%' },
                       { label: 'Pts LNH', width: '10%' },
                       { label: 'Rang div.', width: '10%' },
                     ].map(h => (
@@ -290,7 +290,7 @@ export default function HockeyCapital() {
                           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                             <TeamLogo id={t.id} size={32} />
                             <div>
-                              <div style={{ fontWeight: 600, fontSize: 13, color: 'var(--color-text-primary)' }}>
+                              <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--color-text-primary)' }}>
                                 {t.name}
                                 {t.stats?.clinched && <span style={{ marginLeft: 7, fontSize: 10, padding: '2px 7px', borderRadius: 20, background: '#eafaf1', color: '#1e8449', fontWeight: 600, verticalAlign: 'middle' }}>✓ Qualifié</span>}
                               </div>
@@ -304,17 +304,22 @@ export default function HockeyCapital() {
                           </span>
                         </td>
                         {/* Prix */}
-                        <td style={{ padding: '10px 12px', fontWeight: 700, fontSize: 14, color: 'var(--color-text-primary)' }}>
+                        <td style={{ padding: '10px 12px', fontWeight: 700, fontSize: 18, color: 'var(--color-text-primary)' }}>
                           ${price.toFixed(2)}
                         </td>
                         {/* Variation */}
-                        <td style={{ padding: '10px 12px' }}>
+                        <td style={{ padding: '10px 14px' }}>
                           {hasChange ? (
-                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 2, padding: '3px 9px', borderRadius: 20, fontSize: 12, fontWeight: 700, background: ch > 0 ? '#eafaf1' : ch < 0 ? '#fdedec' : 'var(--color-background-secondary)', color: ch > 0 ? '#1e8449' : ch < 0 ? '#922b21' : 'var(--color-text-secondary)' }}>
-                              {ch > 0 ? '▲' : ch < 0 ? '▼' : ''} {ch >= 0 ? '+' : ''}{ch.toFixed(2)}%
-                            </span>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 17, fontWeight: 800, letterSpacing: '-0.02em', color: ch > 0 ? '#1e8449' : ch < 0 ? '#c0392b' : 'var(--color-text-secondary)' }}>
+                                {ch > 0 ? '▲' : ch < 0 ? '▼' : ''} {ch >= 0 ? '+' : ''}{(price * Math.abs(ch) / 100).toFixed(2)}$
+                              </span>
+                              <span style={{ fontSize: 12, fontWeight: 600, color: ch > 0 ? '#27ae60' : ch < 0 ? '#c0392b' : 'var(--color-text-secondary)', paddingLeft: 2, opacity: 0.8 }}>
+                                {ch >= 0 ? '+' : ''}{ch.toFixed(2)}%
+                              </span>
+                            </div>
                           ) : (
-                            <span style={{ fontSize: 12, color: 'var(--color-text-secondary)', padding: '3px 6px' }}>—</span>
+                            <span style={{ fontSize: 14, color: 'var(--color-text-secondary)', padding: '3px 6px' }}>—</span>
                           )}
                         </td>
                         {/* Pts LNH */}
