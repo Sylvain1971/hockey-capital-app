@@ -282,17 +282,17 @@ export default function HockeyCapital() {
                     const divTextColors = { Atlantique: '#1a5276', Métropolitaine: '#6c3483', Centrale: '#7d6608', Pacifique: '#1e8449', Metropolitaine: '#6c3483' };
                     return (
                       <tr key={t.id}
-                        style={{ borderBottom: '0.5px solid var(--color-border-tertiary)', cursor: 'pointer', transition: 'background 0.15s', height: 58 }}
+                        style={{ borderBottom: '0.5px solid var(--color-border-tertiary)', cursor: 'pointer', transition: 'background 0.15s', height: 62 }}
                         onMouseEnter={e => e.currentTarget.style.background = 'var(--color-background-secondary)'}
                         onMouseLeave={e => e.currentTarget.style.background = idx % 2 === 0 ? '' : 'rgba(0,0,0,0.01)'}>
                         {/* Equipe */}
-                        <td style={{ padding: '10px 12px', whiteSpace: 'nowrap' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                            <TeamLogo id={t.id} size={38} />
+                        <td style={{ padding: '12px 14px', whiteSpace: 'nowrap' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                            <TeamLogo id={t.id} size={42} />
                             <div>
-                              <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--color-text-primary)' }}>
+                              <div style={{ fontWeight: 700, fontSize: 17, color: 'var(--color-text-primary)', lineHeight: 1.2 }}>
                                 {t.name}
-                                {t.stats?.clinched && <span style={{ marginLeft: 7, fontSize: 10, padding: '2px 7px', borderRadius: 20, background: '#eafaf1', color: '#1e8449', fontWeight: 600, verticalAlign: 'middle' }}>✓ Qualifié</span>}
+                                {t.stats?.clinched && <span style={{ marginLeft: 7, fontSize: 11, padding: '2px 7px', borderRadius: 20, background: '#eafaf1', color: '#1e8449', fontWeight: 600, verticalAlign: 'middle' }}>✓ Qualifié</span>}
                               </div>
                             </div>
                           </div>
@@ -304,7 +304,7 @@ export default function HockeyCapital() {
                           </span>
                         </td>
                         {/* Prix */}
-                        <td style={{ padding: '12px 14px', fontWeight: 700, fontSize: 16, color: 'var(--color-text-primary)' }}>
+                        <td style={{ padding: '12px 14px', fontWeight: 700, fontSize: 17, color: 'var(--color-text-primary)' }}>
                           ${price.toFixed(2)}
                         </td>
                         {/* Variation */}
