@@ -61,6 +61,28 @@ export default function LeaguePage({ league, token, onBack }) {
   const [qtyDisplay, setQtyDisplay]   = useState('100');
   const [loading, setLoading]         = useState(true);
   const [toast, setToast]             = useState('');
+  const [kickLoading, setKickLoading] = useState(null);
+
+  // Décoder le user_id depuis le JWT (payload base64)
+  const currentUserId = (() => {
+    try { return JSON.parse(atob(token.split('.')[1])).sub; } catch { return null; }
+  })();
+  const isCreator = league.creator_id === currentUserId;
+
+  async function kickMember(userId, username) {
+    if (!window.confirm(`Exclure ${username} de la ligue ? Ses positions seront annulées.`)) return;
+    setKickLoading(userId);
+    try {
+      const r = await fetch(`${API}/api/leagues/${league.id}/members/${userId}`, {
+        method: 'DELETE', headers: hdrs,
+      });
+      const d = await r.json();
+      if (!r.ok) { setToast(d.error || 'Erreur'); return; }
+      setMembers(prev => prev.filter(m => m.user_id !== userId));
+      setToast(`${username} exclu de la ligue`);
+    } catch (e) { setToast('Erreur réseau'); }
+    finally { setKickLoading(null); }
+  }
 
   const API  = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
   const hdrs = { 'Content-Type':'application/json', Authorization:`Bearer ${token}` };
@@ -307,11 +329,23 @@ export default function LeaguePage({ league, token, onBack }) {
                             {stockVal>0&&<span>📈 {stockVal.toLocaleString('fr-CA',{minimumFractionDigits:2,maximumFractionDigits:2})}$ actions</span>}
                           </div>
                         </div>
-                        <div style={{ textAlign:'right',flexShrink:0 }}>
-                          <div style={{ fontWeight:700,fontSize:16,color:'#111' }}>{displayTotal.toLocaleString('fr-CA',{minimumFractionDigits:2,maximumFractionDigits:2})}$</div>
-                          <div style={{ fontSize:11,marginTop:2,color:gainPct>0?'#27ae60':gainPct<0?'#c0392b':'#888',fontWeight:gainPct!==0?600:400 }}>
-                            {gainPct===0?'— 0.00%':gainPct>0?`▲ +${gainPct.toFixed(2)}%`:`▼ ${gainPct.toFixed(2)}%`}
+                        <div style={{ textAlign:'right',flexShrink:0,display:'flex',alignItems:'center',gap:10 }}>
+                          <div>
+                            <div style={{ fontWeight:700,fontSize:16,color:'#111' }}>{displayTotal.toLocaleString('fr-CA',{minimumFractionDigits:2,maximumFractionDigits:2})}$</div>
+                            <div style={{ fontSize:11,marginTop:2,color:gainPct>0?'#27ae60':gainPct<0?'#c0392b':'#888',fontWeight:gainPct!==0?600:400 }}>
+                              {gainPct===0?'— 0.00%':gainPct>0?`▲ +${gainPct.toFixed(2)}%`:`▼ ${gainPct.toFixed(2)}%`}
+                            </div>
                           </div>
+                          {isCreator && !m.is_creator && (
+                            <button
+                              onClick={() => kickMember(m.user_id, m.username||'ce joueur')}
+                              disabled={kickLoading === m.user_id}
+                              title="Exclure ce participant"
+                              style={{ width:28,height:28,borderRadius:'50%',border:'1.5px solid #e74c3c',background:kickLoading===m.user_id?'#fdd':'#fff',color:'#e74c3c',fontSize:14,fontWeight:700,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,lineHeight:1 }}
+                            >
+                              {kickLoading===m.user_id ? '…' : '✕'}
+                            </button>
+                          )}
                         </div>
                       </div>
                     );
