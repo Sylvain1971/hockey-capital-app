@@ -11,7 +11,7 @@ const S = {
   btn: { width:'100%', padding:14, borderRadius:10, border:'none', background:'#c0392b', color:'#fff', fontSize:15, fontWeight:700, cursor:'pointer', marginTop:8 },
   leagueCard: { border:'1.5px solid #eee', borderRadius:12, padding:'14px 16px', marginBottom:10, transition:'border-color 0.2s', cursor:'pointer' },
   leagueCardHover: { borderColor:'#c0392b' },
-  badge: (s) => ({ display:'inline-block', padding:'2px 10px', borderRadius:20, fontSize:11, fontWeight:700, background: s==='active'?'#e8f8ee':s==='open'?'#fff3e0':'#f0f0f0', color: s==='active'?'#27ae60':s==='open'?'#e67e22':'#888' }),
+  badge: (s) => ({ display:'inline-block', padding:'2px 10px', borderRadius:20, fontSize:11, fontWeight:700, background: s==='active'?'#e8f8ee':s==='open'?'#e8f8ee':'#f0f0f0', color: s==='active'?'#27ae60':s==='open'?'#27ae60':'#888' }),
   err: { color:'#c0392b', fontSize:13, marginTop:6 },
   divider: { display:'flex', alignItems:'center', gap:10, margin:'16px 0', color:'#aaa', fontSize:13 },
   btnDanger: { padding:'5px 12px', borderRadius:8, border:'1px solid #e74c3c', background:'#fff5f5', color:'#e74c3c', fontSize:12, cursor:'pointer', fontWeight:500 },
@@ -19,7 +19,7 @@ const S = {
   btnOpen: { padding:'6px 14px', borderRadius:8, border:'none', background:'#c0392b', color:'#fff', fontSize:13, cursor:'pointer', fontWeight:600 },
 };
 
-const STATUS_LABEL = { open:'En attente', active:'Active', closed:'Terminee' };
+const STATUS_LABEL = { open:'Active', active:'Active', closed:'Terminée' };
 
 export default function MyLeagues({ onClose, token, onCreateNew, onOpenLeague }) {
   const [leagues, setLeagues] = useState([]);
