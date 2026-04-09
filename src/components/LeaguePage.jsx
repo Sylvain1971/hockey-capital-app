@@ -186,19 +186,40 @@ export default function LeaguePage({ league, token, onBack }) {
         {/* TAB CLASSEMENT */}
         {tab === 'classement' && (
           <div style={S.section}>
-            <div style={{ fontSize:15, fontWeight:700, marginBottom:12 }}>Classement de la ligue</div>
+            <div style={{ fontSize:15, fontWeight:700, marginBottom:4 }}>Classement de la ligue</div>
+            <div style={{ fontSize:12, color:'#888', marginBottom:16 }}>Valeur totale = liquidités + actions au prix du marché en temps réel</div>
             {members.length === 0
               ? <div style={{ color:'#aaa', fontSize:14 }}>Aucun membre pour l'instant.</div>
-              : members.map((m, i) => (
-                <div key={m.user_id || i} style={{ ...S.teamRow, cursor:'default' }}>
-                  <div style={{ width:28, height:28, borderRadius:'50%', background: i===0?'#f1c40f':i===1?'#bdc3c7':i===2?'#cd7f32':'#eee', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:700, fontSize:13, color: i<3?'#fff':'#888', flexShrink:0 }}>{i+1}</div>
-                  <div style={{ flex:1, marginLeft:4 }}>
-                    <div style={{ fontWeight:600, fontSize:14 }}>{m.username || m.user_id?.substring(0,8)}</div>
-                    {m.is_creator && <span style={{ fontSize:11, color:'#c0392b', fontWeight:600 }}>Createur</span>}
+              : members.map((m, i) => {
+                const netWorth = m.net_worth || m.cash || 0;
+                const stockVal = m.stock_value || 0;
+                const cash = m.cash || 0;
+                const medals = ['🥇','🥈','🥉'];
+                return (
+                  <div key={m.user_id || i} style={{ ...S.teamRow, cursor:'default', padding:'14px 0' }}>
+                    {/* Rang */}
+                    <div style={{ width:32, height:32, borderRadius:'50%', background: i===0?'#f1c40f':i===1?'#bdc3c7':i===2?'#cd7f32':'#eee', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:700, fontSize:13, color: i<3?'#fff':'#888', flexShrink:0 }}>
+                      {i < 3 ? medals[i] : i+1}
+                    </div>
+                    {/* Nom */}
+                    <div style={{ flex:1, marginLeft:8 }}>
+                      <div style={{ fontWeight:700, fontSize:14, color:'#111' }}>{m.username || m.user_id?.substring(0,8)}</div>
+                      <div style={{ fontSize:11, color:'#888', marginTop:2 }}>
+                        {m.is_creator && <span style={{ color:'#c0392b', fontWeight:600, marginRight:8 }}>Créateur</span>}
+                        💵 {cash.toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}$ liquidités
+                        {stockVal > 0 && <span> · 📈 {stockVal.toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}$ actions</span>}
+                      </div>
+                    </div>
+                    {/* Valeur totale */}
+                    <div style={{ textAlign:'right' }}>
+                      <div style={{ fontWeight:700, fontSize:16, color:'#111' }}>
+                        {netWorth.toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}$
+                      </div>
+                      <div style={{ fontSize:11, color:'#888', marginTop:2 }}>valeur totale</div>
+                    </div>
                   </div>
-                  <div style={{ fontWeight:700, fontSize:15 }}>{(m.net_worth||m.cash||0).toFixed(2)}$</div>
-                </div>
-              ))
+                );
+              })
             }
           </div>
         )}
