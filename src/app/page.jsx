@@ -165,7 +165,7 @@ export default function HockeyCapital() {
         <div className="ticker-track">
           {[...teams, ...teams].map((t, idx) => {
             const ch = t.changePct || 0;
-            const hasChange = t.prevPrice && t.prevPrice !== t.price;
+            const hasChange = t.hasChange !== undefined ? t.hasChange : (t.prevPrice && t.prevPrice !== t.price);
             return (
               <span key={idx} style={{ marginRight: 32, display: 'inline-block', color: 'var(--color-text-secondary)' }}>
                 <strong style={{ color: 'var(--color-text-primary)' }}>{t.id}</strong>{' '}
@@ -254,18 +254,18 @@ export default function HockeyCapital() {
 
             {/* Tableau */}
             <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 15 }}>
                 <thead>
                   <tr style={{ background: 'var(--color-background-secondary)' }}>
                     {[
-                      { label: 'Équipe', width: '29%' },
-                      { label: 'Division', width: '15%' },
-                      { label: 'Prix', width: '12%' },
-                      { label: 'Variation $ / %', width: '18%' },
-                      { label: 'Pts LNH', width: '10%' },
-                      { label: 'Rang div.', width: '10%' },
+                      { label: 'Équipe', width: '31%' },
+                      { label: 'Division', width: '13%' },
+                      { label: 'Prix', width: '13%' },
+                      { label: 'Variation $ / %', width: '20%' },
+                      { label: 'Pts LNH', width: '11%' },
+                      { label: 'Rang div.', width: '12%' },
                     ].map(h => (
-                      <th key={h.label} style={{ textAlign: 'left', padding: '10px 12px', color: 'var(--color-text-secondary)', fontWeight: 600, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid var(--color-border-tertiary)', width: h.width }}>
+                      <th key={h.label} style={{ textAlign: 'left', padding: '10px 12px', color: 'var(--color-text-secondary)', fontWeight: 600, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid var(--color-border-tertiary)', width: h.width }}>
                         {h.label}
                       </th>
                     ))}
@@ -282,13 +282,13 @@ export default function HockeyCapital() {
                     const divTextColors = { Atlantique: '#1a5276', Métropolitaine: '#6c3483', Centrale: '#7d6608', Pacifique: '#1e8449', Metropolitaine: '#6c3483' };
                     return (
                       <tr key={t.id}
-                        style={{ borderBottom: '0.5px solid var(--color-border-tertiary)', cursor: 'pointer', transition: 'background 0.15s' }}
+                        style={{ borderBottom: '0.5px solid var(--color-border-tertiary)', cursor: 'pointer', transition: 'background 0.15s', height: 58 }}
                         onMouseEnter={e => e.currentTarget.style.background = 'var(--color-background-secondary)'}
                         onMouseLeave={e => e.currentTarget.style.background = idx % 2 === 0 ? '' : 'rgba(0,0,0,0.01)'}>
                         {/* Equipe */}
                         <td style={{ padding: '10px 12px', whiteSpace: 'nowrap' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                            <TeamLogo id={t.id} size={32} />
+                            <TeamLogo id={t.id} size={38} />
                             <div>
                               <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--color-text-primary)' }}>
                                 {t.name}
@@ -304,15 +304,15 @@ export default function HockeyCapital() {
                           </span>
                         </td>
                         {/* Prix */}
-                        <td style={{ padding: '10px 12px', fontWeight: 700, fontSize: 18, color: 'var(--color-text-primary)' }}>
+                        <td style={{ padding: '10px 14px', fontWeight: 700, fontSize: 16, color: 'var(--color-text-primary)' }}>
                           ${price.toFixed(2)}
                         </td>
                         {/* Variation */}
                         <td style={{ padding: '10px 14px' }}>
                           {hasChange ? (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 17, fontWeight: 800, letterSpacing: '-0.02em', color: ch > 0 ? '#1e8449' : ch < 0 ? '#c0392b' : 'var(--color-text-secondary)' }}>
-                                {ch > 0 ? '▲' : ch < 0 ? '▼' : ''} {ch >= 0 ? '+' : ''}{(price * Math.abs(ch) / 100).toFixed(2)}$
+                              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 16, fontWeight: 800, letterSpacing: '-0.02em', color: ch > 0 ? '#1e8449' : ch < 0 ? '#c0392b' : 'var(--color-text-secondary)' }}>
+                                {ch > 0 ? '▲' : ch < 0 ? '▼' : ''}{' '}{ch >= 0 ? '+' : ''}{t.changeDollar !== undefined ? Math.abs(t.changeDollar).toFixed(2) : (price * Math.abs(ch) / 100).toFixed(2)}$
                               </span>
                               <span style={{ fontSize: 12, fontWeight: 600, color: ch > 0 ? '#27ae60' : ch < 0 ? '#c0392b' : 'var(--color-text-secondary)', paddingLeft: 2, opacity: 0.8 }}>
                                 {ch >= 0 ? '+' : ''}{ch.toFixed(2)}%
@@ -329,7 +329,7 @@ export default function HockeyCapital() {
                         {/* Rang div */}
                         <td style={{ padding: '10px 12px' }}>
                           {t.stats?.division_rank ? (
-                            <span style={{ fontWeight: 700, color: t.stats.division_rank <= 3 ? '#1e8449' : t.stats.division_rank >= 7 ? '#922b21' : 'var(--color-text-secondary)', fontSize: 13 }}>
+                            <span style={{ fontWeight: 700, color: t.stats.division_rank <= 3 ? '#1e8449' : t.stats.division_rank >= 7 ? '#922b21' : 'var(--color-text-secondary)', fontSize: 15 }}>
                               #{t.stats.division_rank}
                             </span>
                           ) : '—'}
@@ -406,7 +406,7 @@ export default function HockeyCapital() {
               <div style={{ background: 'var(--color-background-primary)', border: '0.5px solid var(--color-border-tertiary)', borderRadius: 12, padding: '1rem 1.25rem', marginBottom: '1rem' }}>
                 <div style={{ fontSize: 14, fontWeight: 500, marginBottom: 12 }}>Ordres actifs</div>
                 {activeOrders.length === 0 ? (
-                  <div style={{ color: 'var(--color-text-secondary)', fontSize: 13 }}>Aucun ordre actif</div>
+                  <div style={{ color: 'var(--color-text-secondary)', fontSize: 15 }}>Aucun ordre actif</div>
                 ) : activeOrders.map(o => (
                   <div key={o.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 0', borderBottom: '0.5px solid var(--color-border-tertiary)', fontSize: 13 }}>
                     <span style={{ padding: '2px 8px', borderRadius: 6, fontSize: 11, fontWeight: 500, background: o.side === 'buy' ? '#eafaf1' : '#fdedec', color: o.side === 'buy' ? '#1e8449' : '#922b21' }}>{o.side === 'buy' ? 'Achat' : 'Vente'}</span>
@@ -421,7 +421,7 @@ export default function HockeyCapital() {
               <div style={{ background: 'var(--color-background-primary)', border: '0.5px solid var(--color-border-tertiary)', borderRadius: 12, padding: '1rem 1.25rem' }}>
                 <div style={{ fontSize: 14, fontWeight: 500, marginBottom: 12 }}>Historique des transactions</div>
                 <div style={{ overflowX: 'auto' }}>
-                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 15 }}>
                     <thead><tr>
                       {['Date','Equipe','Type','Qte','Prix','Total'].map(h => (
                         <th key={h} style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--color-text-secondary)', fontWeight: 400, borderBottom: '0.5px solid var(--color-border-tertiary)', fontSize: 12 }}>{h}</th>
