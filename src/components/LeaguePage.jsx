@@ -179,13 +179,18 @@ export default function LeaguePage({ league, token, onBack }) {
                     <div style={S.logo(p.team_id)}>{p.team_id}</div>
                     <div style={{ flex:1 }}>
                       <div style={{ fontWeight:600 }}>{p.teams?.name || p.team_id}</div>
-                      <div style={{ fontSize:12, color:'#888' }}>{p.shares} actions . Cout moy. {'$'}{(p.avg_cost||0).toFixed(2)}</div>
+                      <div style={{ fontSize:12, color:'#888' }}>{p.shares} actions · Coût moy. ${(p.avg_cost||0).toFixed(2)}</div>
                     </div>
                     <div style={{ textAlign:'right' }}>
-                      <div style={{ fontWeight:700 }}>{'$'}{(p.value||0).toFixed(2)}</div>
-                      <div style={{ fontSize:12, color: p.pnl >= 0 ? '#27ae60' : '#e74c3c' }}>
-                        {p.pnl >= 0 ? '+' : ''}{(p.pnl||0).toFixed(2)}$
-                      </div>
+                      <div style={{ fontWeight:700 }}>${(p.value||0).toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}</div>
+                      {/* Variation du jour seulement */}
+                      {p.pnl !== 0 ? (
+                        <div style={{ fontSize:12, color: p.pnl >= 0 ? '#27ae60' : '#e74c3c', fontWeight:600 }}>
+                          {p.pnl >= 0 ? '▲' : '▼'} {p.pnl >= 0 ? '+' : ''}{(p.pnl||0).toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}$ ({p.pnlPct >= 0 ? '+' : ''}{(p.pnlPct||0).toFixed(2)}% auj.)
+                        </div>
+                      ) : (
+                        <div style={{ fontSize:11, color:'#aaa' }}>— variation demain</div>
+                      )}
                     </div>
                   </div>
                 ))
