@@ -185,42 +185,96 @@ export default function LeaguePage({ league, token, onBack }) {
 
         {/* TAB CLASSEMENT */}
         {tab === 'classement' && (
-          <div style={S.section}>
-            <div style={{ fontSize:15, fontWeight:700, marginBottom:4 }}>Classement de la ligue</div>
-            <div style={{ fontSize:12, color:'#888', marginBottom:16 }}>Valeur totale = liquidités + actions au prix du marché en temps réel</div>
-            {members.length === 0
-              ? <div style={{ color:'#aaa', fontSize:14 }}>Aucun membre pour l'instant.</div>
-              : members.map((m, i) => {
-                const netWorth = m.net_worth || m.cash || 0;
-                const stockVal = m.stock_value || 0;
-                const cash = m.cash || 0;
-                const medals = ['🥇','🥈','🥉'];
-                return (
-                  <div key={m.user_id || i} style={{ ...S.teamRow, cursor:'default', padding:'14px 0' }}>
-                    {/* Rang */}
-                    <div style={{ width:32, height:32, borderRadius:'50%', background: i===0?'#f1c40f':i===1?'#bdc3c7':i===2?'#cd7f32':'#eee', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:700, fontSize:13, color: i<3?'#fff':'#888', flexShrink:0 }}>
-                      {i < 3 ? medals[i] : i+1}
-                    </div>
-                    {/* Nom */}
-                    <div style={{ flex:1, marginLeft:8 }}>
-                      <div style={{ fontWeight:700, fontSize:14, color:'#111' }}>{m.username || m.user_id?.substring(0,8)}</div>
-                      <div style={{ fontSize:11, color:'#888', marginTop:2 }}>
-                        {m.is_creator && <span style={{ color:'#c0392b', fontWeight:600, marginRight:8 }}>Créateur</span>}
-                        💵 {cash.toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}$ liquidités
-                        {stockVal > 0 && <span> · 📈 {stockVal.toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}$ actions</span>}
-                      </div>
-                    </div>
-                    {/* Valeur totale */}
-                    <div style={{ textAlign:'right' }}>
-                      <div style={{ fontWeight:700, fontSize:16, color:'#111' }}>
-                        {netWorth.toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}$
-                      </div>
-                      <div style={{ fontSize:11, color:'#888', marginTop:2 }}>valeur totale</div>
+          <div>
+            {/* Cagnotte et répartition */}
+            {(() => {
+              const mise = league.mise_reelle || 0;
+              const nbJ = league.max_players || 0;
+              const cagnotteBrute = mise * nbJ;
+              const frais = Math.round(cagnotteBrute * 0.05);
+              const cagnotteNette = cagnotteBrute - frais;
+              const mode = league.prize_mode || 'top3';
+
+              // Répartitions selon le mode
+              const repartitions = {
+                winner_takes_all: [{ label: '🥇 1er', pct: 100 }],
+                top2: [{ label: '🥇 1er', pct: 70 }, { label: '🥈 2e', pct: 30 }],
+                top3: [{ label: '🥇 1er', pct: 60 }, { label: '🥈 2e', pct: 30 }, { label: '🥉 3e', pct: 10 }],
+                equal: Array.from({length: nbJ}, (_, i) => ({ label: `#${i+1}`, pct: Math.floor(100/nbJ) })),
+              };
+              const distrib = repartitions[mode] || repartitions.top3;
+
+              return (
+                <div style={{ display:'grid', gridTemplateColumns: `1fr ${distrib.length > 1 ? distrib.map(() => '1fr').join(' ') : '1fr'}`, gap:10, marginBottom:16 }}>
+                  {/* Cagnotte */}
+                  <div style={{ background:'#fff', borderRadius:12, padding:'14px 16px', border:'1px solid #eee' }}>
+                    <div style={{ fontSize:11, color:'#888', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.05em', marginBottom:6 }}>💰 Cagnotte</div>
+                    <div style={{ fontSize:20, fontWeight:700, color:'#111' }}>{cagnotteNette.toLocaleString('fr-CA')}$</div>
+                    <div style={{ fontSize:11, color:'#888', marginTop:4 }}>
+                      {nbJ} × {mise}$ · frais 5% ({frais}$)
                     </div>
                   </div>
-                );
-              })
-            }
+                  {/* Répartition par rang */}
+                  {distrib.map((r, i) => {
+                    const montant = Math.round(cagnotteNette * r.pct / 100);
+                    const membre = members[i];
+                    return (
+                      <div key={i} style={{ background: i===0?'#fffbea':i===1?'#f8f8f8':'#fdf6f0', borderRadius:12, padding:'14px 16px', border:`1px solid ${i===0?'#f1c40f':i===1?'#bdc3c7':'#cd7f32'}` }}>
+                        <div style={{ fontSize:11, color:'#888', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.05em', marginBottom:6 }}>{r.label} · {r.pct}%</div>
+                        <div style={{ fontSize:20, fontWeight:700, color: i===0?'#7d6608':i===1?'#555':'#7d4e00' }}>{montant.toLocaleString('fr-CA')}$</div>
+                        {membre && <div style={{ fontSize:11, color:'#888', marginTop:4 }}>→ {membre.username}</div>}
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })()}
+
+            {/* Classement joueurs */}
+            <div style={S.section}>
+              <div style={{ fontSize:15, fontWeight:700, marginBottom:4 }}>Classement de la ligue</div>
+              <div style={{ fontSize:12, color:'#888', marginBottom:16 }}>Valeur totale = liquidités + actions au prix du marché en temps réel</div>
+              {members.length === 0
+                ? <div style={{ color:'#aaa', fontSize:14 }}>Aucun membre pour l'instant.</div>
+                : members.map((m, i) => {
+                  const netWorth = m.net_worth || m.cash || 0;
+                  const stockVal = m.stock_value || 0;
+                  const cashVal = m.cash || 0;
+                  const medals = ['🥇','🥈','🥉'];
+
+                  // Gain virtuel vs capital de départ
+                  const capitalDepart = league.capital_virtuel || 0;
+                  const gainPct = capitalDepart > 0 ? ((netWorth - capitalDepart) / capitalDepart * 100) : 0;
+
+                  return (
+                    <div key={m.user_id || i} style={{ ...S.teamRow, cursor:'default', padding:'14px 0' }}>
+                      {/* Rang */}
+                      <div style={{ width:32, height:32, borderRadius:'50%', background: i===0?'#f1c40f':i===1?'#bdc3c7':i===2?'#cd7f32':'#eee', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:700, fontSize:14, color: i<3?'#fff':'#888', flexShrink:0 }}>
+                        {i < 3 ? medals[i] : i+1}
+                      </div>
+                      {/* Nom + détails */}
+                      <div style={{ flex:1, marginLeft:10 }}>
+                        <div style={{ fontWeight:700, fontSize:14, color:'#111' }}>{m.username || m.user_id?.substring(0,8)}</div>
+                        <div style={{ fontSize:11, color:'#888', marginTop:3, display:'flex', gap:10, flexWrap:'wrap' }}>
+                          {m.is_creator && <span style={{ color:'#c0392b', fontWeight:600 }}>Créateur</span>}
+                          <span>💵 {cashVal.toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}$ liquidités</span>
+                          {stockVal > 0 && <span>📈 {stockVal.toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}$ actions</span>}
+                        </div>
+                      </div>
+                      {/* Valeur totale + % gain */}
+                      <div style={{ textAlign:'right', flexShrink:0 }}>
+                        <div style={{ fontWeight:700, fontSize:16, color:'#111' }}>
+                          {netWorth.toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}$
+                        </div>
+                        <div style={{ fontSize:11, marginTop:2, color: gainPct >= 0 ? '#27ae60' : '#c0392b', fontWeight:600 }}>
+                          {gainPct >= 0 ? '▲' : '▼'} {Math.abs(gainPct).toFixed(2)}% vs départ
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              }
+            </div>
           </div>
         )}
       </div>
