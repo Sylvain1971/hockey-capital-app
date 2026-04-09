@@ -289,7 +289,7 @@ export default function LeaguePage({ league, token, onBack }) {
                           {displayTotal.toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}$
                         </div>
                         <div style={{ fontSize:11, marginTop:2, color: gainPct > 0 ? '#27ae60' : gainPct < 0 ? '#c0392b' : '#888', fontWeight: gainPct !== 0 ? 600 : 400 }}>
-                          {gainPct === 0 ? '— même niveau' : gainPct > 0 ? `▲ +${gainPct.toFixed(2)}%` : `▼ ${gainPct.toFixed(2)}%`}
+                        {gainPct === 0 ? '— 0.00%' : gainPct > 0 ? `▲ +${gainPct.toFixed(2)}%` : `▼ ${gainPct.toFixed(2)}%`}
                         </div>
                       </div>
                     </div>
