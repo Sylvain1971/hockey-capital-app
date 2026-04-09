@@ -122,15 +122,10 @@ export default function HockeyCapital() {
                 HC Mes Ligues
               </button>
               <button onClick={logout} style={{ padding: '6px 14px', borderRadius: 8, border: '0.5px solid var(--color-border-secondary)', background: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--color-text-primary)' }}>
-                Deconnexion
+                Déconnexion
               </button>
             </>
-          ) : (
-            <>
-              <button onClick={() => setAuthModal('login')} style={{ padding: '6px 14px', borderRadius: 8, border: '0.5px solid var(--color-border-secondary)', background: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--color-text-primary)' }}>Connexion</button>
-              <button onClick={() => setAuthModal('register')} style={{ padding: '6px 14px', borderRadius: 8, border: 'none', background: '#c0392b', color: 'white', cursor: 'pointer', fontSize: 13, fontWeight: 500 }}>S'inscrire</button>
-            </>
-          )}
+          ) : null}
         </div>
       </div>
 
