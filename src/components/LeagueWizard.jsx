@@ -48,7 +48,7 @@ function Step1({ d, set }) {
     <div style={S.info}>Configurez votre ligue - les joueurs rejoindront via un code ou invitation email.</div>
     <div style={S.mb}>
       <label style={S.lbl}>Nom de la ligue *</label>
-      <input style={S.inp} placeholder="Ex: Pool Hockey 2026" value={d.name} onChange={e => set('name', e.target.value)} />
+      <input style={S.inp} placeholder="Ex: Ligue Hockey 2026" value={d.name} onChange={e => set('name', e.target.value)} />
     </div>
     <div style={S.row}>
       <div style={S.half}>
@@ -259,7 +259,7 @@ function Step5({ d, result }) {
 // ---- Composant principal LeagueWizard ----
 const DEFAULT = {
   name:'', players:1, duration:'season', draft:'libre', tradeLimit:5,
-  mise:20, capital:100000, maxConc:100, spread:2,
+  mise:20, capital:50000, maxConc:100, spread:2,
   dividendsEnabled:true, limitOrdersEnabled:true, elimPenalty:true,
   prizeMode:'top3', bonusWeekly:false, bonusMid:false,
   emails:[],
