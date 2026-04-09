@@ -36,6 +36,7 @@ export default function LeaguePage({ league, token, onBack }) {
   const [tab, setTab] = useState('marche');
   const [tradeModal, setTradeModal] = useState(null);
   const [qty, setQty] = useState(100);
+  const [qtyInput, setQtyInput] = useState('100');
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState('');
 
@@ -71,7 +72,8 @@ export default function LeaguePage({ league, token, onBack }) {
       if (!res.ok) throw new Error(data.error);
       showToast(tradeModal.side === 'buy' ? `Achat de ${qty} action(s) ${tradeModal.team.id} confirme!` : `Vente de ${qty} action(s) confirmee!`);
       setTradeModal(null);
-      setQty(1);
+      setQty(100);
+      setQtyInput('100');
       fetchAll();
     } catch(e) { showToast('Erreur: ' + e.message); }
   }
@@ -144,9 +146,9 @@ export default function LeaguePage({ league, token, onBack }) {
                     {held && held.shares > 0 && <div style={{ fontSize:11, color:'#27ae60' }}>{held.shares} detenues</div>}
                   </div>
                   <div style={{ display:'flex', gap:6 }}>
-                    <button style={S.btnBuy} onClick={() => { setTradeModal({ team:t, side:'buy' }); setQty(100); }}>Acheter</button>
+                    <button style={S.btnBuy} onClick={() => { setTradeModal({ team:t, side:'buy' }); setQty(100); setQtyInput('100'); }}>Acheter</button>
                     {held && held.shares > 0 && (
-                      <button style={S.btnSell} onClick={() => { setTradeModal({ team:t, side:'sell' }); setQty(100); }}>Vendre</button>
+                      <button style={S.btnSell} onClick={() => { setTradeModal({ team:t, side:'sell' }); setQty(100); setQtyInput('100'); }}>Vendre</button>
                     )}
                   </div>
                 </div>
@@ -321,7 +323,7 @@ export default function LeaguePage({ league, token, onBack }) {
             <label style={{ fontSize:14, fontWeight:600, color:'#333' }}>Lot (actions)</label>
             <div style={{ display:'flex', gap:6, marginTop:6, marginBottom:8, flexWrap:'wrap' }}>
               {[100, 500, 1000, 5000, 10000].map(n => (
-                <button key={n} onClick={() => setQty(n)}
+                <button key={n} onClick={() => { setQty(n); setQtyInput(String(n)); }}
                   style={{ padding:'6px 12px', borderRadius:8, border: qty === n ? 'none' : '1px solid #ddd', background: qty === n ? '#c0392b' : '#f8f8f8', color: qty === n ? '#fff' : '#555', fontSize:13, cursor:'pointer', fontWeight: qty === n ? 700 : 400 }}>
                   {n.toLocaleString()}
                 </button>
@@ -329,11 +331,11 @@ export default function LeaguePage({ league, token, onBack }) {
             </div>
             <input
               type="number" min={1}
-              value={qty}
+              value={qtyInput}
               onChange={e => {
-                const v = e.target.value;
-                if (v === '' || v === '0') { setQty(''); return; }
-                const n = parseInt(v);
+                const raw = e.target.value;
+                setQtyInput(raw);
+                const n = parseInt(raw);
                 if (!isNaN(n) && n > 0) setQty(n);
               }}
               onFocus={e => e.target.select()}
