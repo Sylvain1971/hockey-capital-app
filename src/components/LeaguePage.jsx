@@ -20,7 +20,7 @@ function TeamLogo({ id, size = 36 }) {
         width={size}
         height={size}
         onError={() => setErr(true)}
-        style={{ width: size, height: size, objectFit: 'contain', flexShrink: 0 }}
+        style={{ width: size, height: size, objectFit: 'contain', flexShrink: 0, padding: 2 }}
       />
     );
   }
