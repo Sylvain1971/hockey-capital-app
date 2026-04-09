@@ -63,7 +63,6 @@ function Step1({ d, set }) {
           <option value="week">1 semaine</option>
           <option value="month">1 mois</option>
           <option value="season">Saison complete</option>
-          <option value="playoffs">Series seulement</option>
         </select>
       </div>
     </div>
@@ -71,7 +70,6 @@ function Step1({ d, set }) {
       <label style={S.lbl}>Mode de draft</label>
       <select style={S.sel} value={d.draft} onChange={e => set('draft', e.target.value)}>
         <option value="libre">Libre - chacun achete ses equipes</option>
-        <option value="serpentin">Serpentin - ordre alterne</option>
       </select>
     </div>
     <div style={S.mb}>
@@ -240,8 +238,8 @@ function Step5({ d, result }) {
     {[
       ['Nom', d.name],
       ['Joueurs', `${d.players} joueurs`],
-      ['Duree', { week:'1 semaine', month:'1 mois', season:'Saison complete', playoffs:'Series seulement' }[d.duration]],
-      ['Draft', { libre:'Libre', serpentin:'Serpentin' }[d.draft]],
+      ['Duree', { week:'1 semaine', month:'1 mois', season:'Saison complete' }[d.duration]],
+      ['Draft', { libre:'Libre' }[d.draft]],
       ['Mise reelle', `${d.mise}$ CAD`],
       ['Capital virtuel', `${d.capital.toLocaleString()}$`],
       ['Distribution', { winner:'Gagnant tout', top2:'Top 2', top3:'Top 3' }[d.prizeMode] || d.prizeMode],
@@ -258,7 +256,7 @@ function Step5({ d, result }) {
 
 // ---- Composant principal LeagueWizard ----
 const DEFAULT = {
-  name:'', players:1, duration:'season', draft:'libre', tradeLimit:5,
+  name:'', players:1, duration:'season', draft:'libre', tradeLimit:0,
   mise:20, capital:50000, maxConc:100, spread:2,
   dividendsEnabled:true, limitOrdersEnabled:true, elimPenalty:true,
   prizeMode:'top3', bonusWeekly:false, bonusMid:false,
