@@ -350,10 +350,29 @@ export default function LeaguePage({ league, token, onBack }) {
               placeholder="Quantité..."
             />
             <div style={{ fontSize:13, color:'#888', marginTop:8, padding:'8px 12px', background:'#f0f7ff', borderRadius:8 }}>
-              Total estimé: <strong>{'$'}{((tradeModal.team.price||25) * qty).toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}</strong>
-              {tradeModal.side === 'buy' && cash < (tradeModal.team.price||25) * qty && (
-                <span style={{ color:'#c0392b', marginLeft:8 }}>(!) Liquidités insuffisantes</span>
-              )}
+              {(() => {
+                const prix = tradeModal.team.price || 25;
+                const spread = 0.01; // 1% demi-spread
+                const prixAvecFrais = tradeModal.side === 'buy'
+                  ? prix * (1 + spread)
+                  : prix * (1 - spread);
+                const total = prixAvecFrais * qty;
+                const insuffisant = tradeModal.side === 'buy' && cash < total;
+                return (
+                  <>
+                    <div>
+                      Prix exécution: <strong>${prixAvecFrais.toFixed(2)}</strong>
+                      <span style={{ color:'#aaa', marginLeft:6, fontSize:11 }}>
+                        ({tradeModal.side === 'buy' ? '+1% frais achat' : '-1% frais vente'})
+                      </span>
+                    </div>
+                    <div style={{ marginTop:4 }}>
+                      Total: <strong>${total.toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}</strong>
+                      {insuffisant && <span style={{ color:'#c0392b', marginLeft:8 }}>(!) Liquidités insuffisantes</span>}
+                    </div>
+                  </>
+                );
+              })()}
             </div>
 
             {/* Avertissements de concentration */}
