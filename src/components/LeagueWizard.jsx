@@ -139,7 +139,9 @@ function Step3({ d, set }) {
     </div>
     {d.prizeMode !== 'custom' && d.mise > 0 && (
       <div style={{ background:'#f9f9f9', borderRadius:10, padding:'12px 16px', marginBottom:16 }}>
-        <div style={{ fontSize:13, fontWeight:600, color:'#333', marginBottom:8 }}>Apercu avec {d.players} joueurs ({(d.players * d.mise).toFixed(2)}$ total)</div>
+        <div style={{ fontSize:13, fontWeight:600, color:'#333', marginBottom:8 }}>
+          Aperçu avec {d.players} joueur{d.players > 1 ? 's' : ''} — Cagnotte: {(d.players * d.mise).toFixed(2)}$ (0% de frais)
+        </div>
         {d.prizeMode === 'winner' && <div style={{ fontSize:14, color:'#27ae60' }}>1er: 1er: {(d.players * d.mise).toFixed(2)}$</div>}
         {d.prizeMode === 'top2' && <>
           <div style={{ fontSize:14, color:'#27ae60' }}>1er: 1er: {(d.players * d.mise * 0.70).toFixed(2)}$</div>

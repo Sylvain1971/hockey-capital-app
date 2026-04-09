@@ -210,8 +210,9 @@ export default function LeaguePage({ league, token, onBack }) {
             {(() => {
               const mise = league.mise_reelle || 0;
               const nbJ = league.max_players || 0;
+              const FRAIS_PCT = 0; // % de frais de plateforme (modifiable ultérieurement)
               const cagnotteBrute = mise * nbJ;
-              const frais = Math.round(cagnotteBrute * 0.05);
+              const frais = Math.round(cagnotteBrute * FRAIS_PCT / 100);
               const cagnotteNette = cagnotteBrute - frais;
               const mode = league.prize_mode || 'top3';
 
@@ -231,11 +232,11 @@ export default function LeaguePage({ league, token, onBack }) {
                     <div style={{ fontSize:11, color:'#888', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.05em', marginBottom:6 }}>💰 Cagnotte nette</div>
                     <div style={{ fontSize:20, fontWeight:700, color:'#111' }}>{cagnotteNette.toLocaleString('fr-CA')}$</div>
                     <div style={{ fontSize:11, color:'#888', marginTop:4 }}>
-                      {mise}$ / joueur × {nbJ} joueurs = {cagnotteBrute}$
+                      {mise}$ / joueur × {nbJ} joueur{nbJ > 1 ? 's' : ''} = {cagnotteBrute}$
                     </div>
-                    <div style={{ fontSize:11, color:'#aaa', marginTop:2 }}>
-                      Frais 5% : -{frais}$
-                    </div>
+                    {frais > 0 && (
+                      <div style={{ fontSize:11, color:'#aaa', marginTop:2 }}>Frais {FRAIS_PCT}% : -{frais}$</div>
+                    )}
                   </div>
                   {/* Répartition par rang */}
                   {distrib.map((r, i) => {
