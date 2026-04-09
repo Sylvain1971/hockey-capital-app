@@ -256,34 +256,32 @@ export default function LeaguePage({ league, token, onBack }) {
                   const netWorth = m.net_worth || m.cash || 0;
                   const stockVal = m.stock_value || 0;
                   const cashVal = m.cash || 0;
+                  // Valeur totale = cash + actions (même si 0 actions = 100% cash)
+                  const displayTotal = cashVal + stockVal;
                   const medals = ['🥇','🥈','🥉'];
 
-                  // Gain virtuel vs capital de départ
                   const capitalDepart = league.capital_virtuel || 0;
-                  const gainPct = capitalDepart > 0 ? ((netWorth - capitalDepart) / capitalDepart * 100) : 0;
+                  const gainPct = capitalDepart > 0 ? ((displayTotal - capitalDepart) / capitalDepart * 100) : 0;
 
                   return (
                     <div key={m.user_id || i} style={{ ...S.teamRow, cursor:'default', padding:'14px 0' }}>
-                      {/* Rang */}
                       <div style={{ width:32, height:32, borderRadius:'50%', background: i===0?'#f1c40f':i===1?'#bdc3c7':i===2?'#cd7f32':'#eee', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:700, fontSize:14, color: i<3?'#fff':'#888', flexShrink:0 }}>
                         {i < 3 ? medals[i] : i+1}
                       </div>
-                      {/* Nom + détails */}
                       <div style={{ flex:1, marginLeft:10 }}>
                         <div style={{ fontWeight:700, fontSize:14, color:'#111' }}>{m.username || m.user_id?.substring(0,8)}</div>
                         <div style={{ fontSize:11, color:'#888', marginTop:3, display:'flex', gap:10, flexWrap:'wrap' }}>
                           {m.is_creator && <span style={{ color:'#c0392b', fontWeight:600 }}>Créateur</span>}
-                          <span>💵 {cashVal.toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}$ liquidités</span>
+                          <span>💵 {cashVal.toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}$</span>
                           {stockVal > 0 && <span>📈 {stockVal.toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}$ actions</span>}
                         </div>
                       </div>
-                      {/* Valeur totale + % gain */}
                       <div style={{ textAlign:'right', flexShrink:0 }}>
                         <div style={{ fontWeight:700, fontSize:16, color:'#111' }}>
-                          {netWorth.toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}$
+                          {displayTotal.toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}$
                         </div>
-                        <div style={{ fontSize:11, marginTop:2, color: gainPct >= 0 ? '#27ae60' : '#c0392b', fontWeight:600 }}>
-                          {gainPct >= 0 ? '▲' : '▼'} {Math.abs(gainPct).toFixed(2)}% vs départ
+                        <div style={{ fontSize:11, marginTop:2, color: gainPct > 0 ? '#27ae60' : gainPct < 0 ? '#c0392b' : '#888', fontWeight: gainPct !== 0 ? 600 : 400 }}>
+                          {gainPct === 0 ? '— même niveau' : gainPct > 0 ? `▲ +${gainPct.toFixed(2)}%` : `▼ ${gainPct.toFixed(2)}%`}
                         </div>
                       </div>
                     </div>
@@ -329,7 +327,19 @@ export default function LeaguePage({ league, token, onBack }) {
                 </button>
               ))}
             </div>
-            <input type="number" min={1} value={qty} onChange={e => setQty(parseInt(e.target.value)||1)} style={S.inp} placeholder="Ou entrez une quantite..." />
+            <input
+              type="number" min={1}
+              value={qty}
+              onChange={e => {
+                const v = e.target.value;
+                if (v === '' || v === '0') { setQty(''); return; }
+                const n = parseInt(v);
+                if (!isNaN(n) && n > 0) setQty(n);
+              }}
+              onFocus={e => e.target.select()}
+              style={S.inp}
+              placeholder="Quantité d'actions..."
+            />
             <div style={{ fontSize:13, color:'#888', marginTop:8, padding:'8px 12px', background:'#f0f7ff', borderRadius:8 }}>
               Total estimé: <strong>{'$'}{((tradeModal.team.price||25) * qty).toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}</strong>
               {tradeModal.side === 'buy' && cash < (tradeModal.team.price||25) * qty && (
