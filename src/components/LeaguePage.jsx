@@ -228,10 +228,13 @@ export default function LeaguePage({ league, token, onBack }) {
                 <div style={{ display:'grid', gridTemplateColumns: `1fr ${distrib.length > 1 ? distrib.map(() => '1fr').join(' ') : '1fr'}`, gap:10, marginBottom:16 }}>
                   {/* Cagnotte */}
                   <div style={{ background:'#fff', borderRadius:12, padding:'14px 16px', border:'1px solid #eee' }}>
-                    <div style={{ fontSize:11, color:'#888', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.05em', marginBottom:6 }}>💰 Cagnotte</div>
+                    <div style={{ fontSize:11, color:'#888', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.05em', marginBottom:6 }}>💰 Cagnotte nette</div>
                     <div style={{ fontSize:20, fontWeight:700, color:'#111' }}>{cagnotteNette.toLocaleString('fr-CA')}$</div>
                     <div style={{ fontSize:11, color:'#888', marginTop:4 }}>
-                      {nbJ} × {mise}$ · frais 5% ({frais}$)
+                      {mise}$ / joueur × {nbJ} joueurs = {cagnotteBrute}$
+                    </div>
+                    <div style={{ fontSize:11, color:'#aaa', marginTop:2 }}>
+                      Frais 5% : -{frais}$
                     </div>
                   </div>
                   {/* Répartition par rang */}
