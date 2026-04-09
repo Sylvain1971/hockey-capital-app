@@ -326,8 +326,12 @@ export default function LeagueWizard({ onClose, token }) {
                 <>
                   <button style={{ ...S.btn, opacity: canNext() ? 1 : 0.5 }}
                     disabled={!canNext()}
-                    onClick={() => step === 3 ? submit() : setStep(s => s + 1)}>
-                    {loading ? 'Creation...' : step === 3 ? 'Creer la ligue HC' : 'Suivant'}
+                    onClick={() => {
+                      // Ligue solo: skip l'étape invitations (step 3) → aller directement à confirmation
+                      if (step === 2 && d.players === 1) { submit(); return; }
+                      step === 3 ? submit() : setStep(s => s + 1);
+                    }}>
+                    {loading ? 'Création...' : (step === 3 || (step === 2 && d.players === 1)) ? 'Créer la ligue HC' : 'Suivant'}
                   </button>
                   {step > 0 && <button style={S.btnSec} onClick={() => setStep(s => s - 1)}>Retour</button>}
                 </>
