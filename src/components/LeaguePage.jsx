@@ -1,14 +1,35 @@
 'use client';
 import { useState, useEffect } from 'react';
 
-const TEAM_COLORS = {
-  MTL:'#AF1E2D',BOS:'#FFB81C',TOR:'#00205B',TBL:'#002868',FLA:'#041E42',OTT:'#C52032',
-  BUF:'#002654',DET:'#CE1126',NYR:'#0038A8',PHI:'#F74902',PIT:'#1a1a1a',WSH:'#041E42',
-  NJD:'#CE1126',NYI:'#00539B',CAR:'#CC0000',CBJ:'#002654',CHI:'#CF0A2C',NSH:'#FFB81C',
-  STL:'#002F87',COL:'#6F263D',MIN:'#154734',DAL:'#006847',WPG:'#041E42',UTA:'#69B3E7',
-  VGK:'#B4975A',EDM:'#FF4C00',CGY:'#C8102E',VAN:'#00843D',SEA:'#001628',SJS:'#006D75',
-  ANA:'#FC4C02',LAK:'#333333',
-};
+// ---- Logo équipe NHL ----
+function TeamLogo({ id, size = 36 }) {
+  const [err, setErr] = useState(false);
+  const TEAM_COLORS_FB = {
+    MTL:'#AF1E2D',BOS:'#FFB81C',TOR:'#00205B',TBL:'#002868',FLA:'#041E42',OTT:'#C52032',
+    BUF:'#002654',DET:'#CE1126',NYR:'#0038A8',PHI:'#F74902',PIT:'#1a1a1a',WSH:'#041E42',
+    NJD:'#CE1126',NYI:'#00539B',CAR:'#CC0000',CBJ:'#002654',CHI:'#CF0A2C',NSH:'#FFB81C',
+    STL:'#002F87',COL:'#6F263D',MIN:'#154734',DAL:'#006847',WPG:'#041E42',UTA:'#69B3E7',
+    VGK:'#B4975A',EDM:'#FF4C00',CGY:'#C8102E',VAN:'#00843D',SEA:'#001628',SJS:'#006D75',
+    ANA:'#FC4C02',LAK:'#333333',
+  };
+  if (!err) {
+    return (
+      <img
+        src={`https://assets.nhle.com/logos/nhl/svg/${id}_light.svg`}
+        alt={id}
+        width={size}
+        height={size}
+        onError={() => setErr(true)}
+        style={{ borderRadius: '50%', objectFit: 'contain', background: '#f5f5f5', flexShrink: 0 }}
+      />
+    );
+  }
+  return (
+    <div style={{ width: size, height: size, borderRadius: '50%', background: TEAM_COLORS_FB[id] || '#888', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: size * 0.28, fontWeight: 700, color: '#fff', flexShrink: 0 }}>
+      {id}
+    </div>
+  );
+}
 
 const S = {
   overlay: { position:'fixed', top:0, left:0, right:0, bottom:0, background:'#f5f5f5', zIndex:1500, overflowY:'auto' },
@@ -20,7 +41,7 @@ const S = {
   statVal: { fontSize:22, fontWeight:700, color:'#111' },
   statLbl: { fontSize:12, color:'#888', marginTop:2 },
   teamRow: { display:'flex', alignItems:'center', gap:10, padding:'10px 0', borderBottom:'1px solid #f0f0f0' },
-  logo: (id) => ({ width:36, height:36, borderRadius:'50%', background: TEAM_COLORS[id]||'#888', display:'flex', alignItems:'center', justifyContent:'center', fontSize:10, fontWeight:700, color:'#fff', flexShrink:0 }),
+  logo: () => ({ flexShrink:0 }),
   btnBuy: { padding:'6px 14px', borderRadius:8, border:'none', background:'#c0392b', color:'#fff', fontSize:13, fontWeight:600, cursor:'pointer' },
   btnSell: { padding:'6px 14px', borderRadius:8, border:'1px solid #c0392b', background:'none', color:'#c0392b', fontSize:13, fontWeight:600, cursor:'pointer' },
   modalBg: { position:'fixed', top:0, left:0, right:0, bottom:0, background:'rgba(0,0,0,0.6)', zIndex:3000, display:'flex', alignItems:'center', justifyContent:'center', padding:16 },
@@ -138,7 +159,7 @@ export default function LeaguePage({ league, token, onBack }) {
               const held = positions.find(p => p.team_id === t.id);
               return (
                 <div key={t.id} style={S.teamRow}>
-                  <div style={S.logo(t.id)}>{t.id}</div>
+                  <TeamLogo id={t.id} size={36} />
                   <div style={{ flex:1 }}>
                     <div style={{ fontWeight:600, fontSize:14, color:'#111' }}>{t.name}</div>
                     <div style={{ fontSize:12, color:'#888' }}>{t.division} . {t.stats?.points || 0}pts . {'#'}{t.stats?.division_rank || '-'}</div>
@@ -180,7 +201,7 @@ export default function LeaguePage({ league, token, onBack }) {
                 ? <div style={{ color:'#aaa', fontSize:14 }}>Aucune position. Allez dans le Marche pour acheter des actions!</div>
                 : positions.map(p => (
                   <div key={p.team_id} style={S.teamRow}>
-                    <div style={S.logo(p.team_id)}>{p.team_id}</div>
+                    <TeamLogo id={p.team_id} size={36} />
                     <div style={{ flex:1 }}>
                       <div style={{ fontWeight:600 }}>{p.teams?.name || p.team_id}</div>
                       <div style={{ fontSize:12, color:'#888' }}>{p.shares} actions · Coût moy. ${(p.avg_cost||0).toFixed(2)}</div>
@@ -307,7 +328,7 @@ export default function LeaguePage({ league, token, onBack }) {
           <div style={S.modalCard}>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
               <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-                <div style={S.logo(tradeModal.team.id)}>{tradeModal.team.id}</div>
+                <TeamLogo id={tradeModal.team.id} size={40} />
                 <div>
                   <div style={{ fontWeight:700, fontSize:16 }}>{tradeModal.side === 'buy' ? 'Acheter' : 'Vendre'}</div>
                   <div style={{ fontSize:13, color:'#666' }}>{tradeModal.team.name}</div>

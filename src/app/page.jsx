@@ -1,5 +1,5 @@
 'use client';
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useAuth, useMarket, usePortfolio, useOrders, useImpactLog } from '../hooks/useMarket';
 import { orders as ordersApi, market as marketApi } from '../lib/api';
 import LeagueWizard from '../components/LeagueWizard';
@@ -16,9 +16,28 @@ const TEAM_COLORS = {
   ANA:'#FC4C02',LAK:'#333333',
 };
 
-// ================================================================
-// Composant principal
-// ================================================================
+// ---- Logo équipe NHL ----
+function TeamLogo({ id, size = 32 }) {
+  const [err, setErr] = React.useState(false);
+  if (!err) {
+    return (
+      <img
+        src={`https://assets.nhle.com/logos/nhl/svg/${id}_light.svg`}
+        alt={id}
+        width={size}
+        height={size}
+        onError={() => setErr(true)}
+        style={{ borderRadius: '50%', objectFit: 'contain', background: '#f5f5f5', flexShrink: 0 }}
+      />
+    );
+  }
+  // Fallback: cercle coloré avec initiales
+  return (
+    <div style={{ width: size, height: size, borderRadius: '50%', background: TEAM_COLORS[id] || '#888', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: size * 0.28, fontWeight: 700, color: 'white', flexShrink: 0 }}>
+      {id}
+    </div>
+  );
+}
 export default function HockeyCapital() {
   const { user, loading: authLoading, login, register, logout, isAuthenticated } = useAuth();
   const { teams, loading: mktLoading, wsConnected, lastUpdate, refresh: refreshMarket } = useMarket();
@@ -269,7 +288,7 @@ export default function HockeyCapital() {
                         {/* Equipe */}
                         <td style={{ padding: '10px 12px', whiteSpace: 'nowrap' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                            <div style={{ width: 32, height: 32, borderRadius: '50%', background: TEAM_COLORS[t.id] || '#888', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 700, color: 'white', flexShrink: 0, boxShadow: '0 1px 3px rgba(0,0,0,0.2)' }}>{t.id}</div>
+                            <TeamLogo id={t.id} size={32} />
                             <div>
                               <div style={{ fontWeight: 600, fontSize: 13, color: 'var(--color-text-primary)' }}>
                                 {t.name}
