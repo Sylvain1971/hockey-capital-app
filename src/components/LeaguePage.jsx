@@ -104,7 +104,18 @@ export default function LeaguePage({ league, token, onBack }) {
           <div style={{ fontWeight:700, fontSize:17, color:'#111' }}>{league.name}</div>
           <div style={{ fontSize:12, color:'#888' }}>Code: <strong>{league.invite_code}</strong> . {league.max_players} joueurs . {league.duration}</div>
         </div>
-        <div style={{ fontSize:14, fontWeight:600, color:'#111' }}>Liquidités: <span style={{ color:'#27ae60' }}>${cash.toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}</span></div>
+        <div style={{ fontSize:14, fontWeight:600, color:'#111', textAlign:'right' }}>
+          <div>
+            <span style={{ color:'#27ae60' }}>${totalValue.toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}</span>
+            <span style={{ fontSize:11, color:'#888', fontWeight:400, marginLeft:6 }}>valeur totale</span>
+          </div>
+          <div style={{ fontSize:11, color:'#888', fontWeight:400 }}>
+            💵 {cash.toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}$ liquidités
+            {(portfolio?.stockValue || 0) > 0 && (
+              <span> · 📈 {(portfolio?.stockValue || 0).toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}$ actions</span>
+            )}
+          </div>
+        </div>
       </div>
 
       <div style={S.body}>
@@ -149,13 +160,13 @@ export default function LeaguePage({ league, token, onBack }) {
           <div>
             <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:12, marginBottom:16 }}>
               {[
-                ['Liquidites', `${cash.toFixed(2)}$`],
-                ['Valeur actions', `${(portfolio?.stockValue||0).toFixed(2)}$`],
-                ['Valeur totale', `${(portfolio?.totalValue||0).toFixed(2)}$`],
-              ].map(([lbl, val]) => (
-                <div key={lbl} style={{ ...S.section, ...S.stat, padding:'14px 10px' }}>
-                  <div style={S.statVal}>{val}</div>
-                  <div style={S.statLbl}>{lbl}</div>
+                { lbl: 'Liquidités', val: `${cash.toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}$`, color: '#27ae60' },
+                { lbl: 'Valeur actions', val: `${(portfolio?.stockValue||0).toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}$`, color: '#2980b9' },
+                { lbl: 'Valeur TOTALE', val: `${(portfolio?.totalValue||0).toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2})}$`, color: '#c0392b', highlight: true },
+              ].map(({lbl, val, color, highlight}) => (
+                <div key={lbl} style={{ ...S.section, ...S.stat, padding:'14px 10px', border: highlight ? '2px solid #c0392b' : '1px solid #eee', background: highlight ? '#fff8f7' : '#fff' }}>
+                  <div style={{ ...S.statVal, color, fontSize: highlight ? 24 : 22 }}>{val}</div>
+                  <div style={{ ...S.statLbl, fontWeight: highlight ? 700 : 400, color: highlight ? '#c0392b' : '#888' }}>{lbl}</div>
                 </div>
               ))}
             </div>
