@@ -332,12 +332,13 @@ export default function LeaguePage({ league, token, onBack }) {
               ))}
             </div>
             <input
-              type="number"
-              min={1}
+              type="text"
+              inputMode="numeric"
               value={qtyDisplay}
               onChange={e => {
-                setQtyDisplay(e.target.value);
-                const n = parseInt(e.target.value);
+                const raw = e.target.value.replace(/[^0-9]/g, '');
+                setQtyDisplay(raw);
+                const n = parseInt(raw);
                 if (!isNaN(n) && n > 0) setQty(n);
               }}
               onFocus={e => e.target.select()}
