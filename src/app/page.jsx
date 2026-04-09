@@ -233,13 +233,8 @@ export default function HockeyCapital() {
                 </div>
               </div>
             ) : (
-              <div style={{ background:'#f0f7ff', border:'1px solid #cce0ff', borderRadius:10, padding:'12px 16px', marginBottom:16, display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:8 }}>
-                <div style={{ fontSize:13, color:'#1a4a7a' }}>
-                  Marche Ceci est le marche global en lecture seule. Pour acheter et vendre, allez dans <strong>Mes Ligues</strong> et selectionnez votre ligue.
-                </div>
-                <button onClick={() => setShowMyLeagues(true)} style={{ padding:'6px 14px', borderRadius:8, border:'none', background:'#c0392b', color:'white', cursor:'pointer', fontSize:13, fontWeight:600 }}>
-                  HC Mes Ligues
-                </button>
+              <div style={{ background:'#fff8f0', border:'1px solid #f5d0c8', borderRadius:10, padding:'10px 16px', marginBottom:16, fontSize:13, color:'#7a3020' }}>
+                📊 Marché global — lecture seule. Allez dans <strong>Mes Ligues</strong> via le menu en haut pour acheter et vendre.
               </div>
             )}
 
@@ -247,40 +242,79 @@ export default function HockeyCapital() {
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
                 <thead>
-                  <tr>
-                    {['Equipe','Division','Prix','Variation','Pts LNH','Rang div.'].map(h => (
-                      <th key={h} style={{ textAlign: 'left', padding: '7px 8px', color: 'var(--color-text-secondary)', fontWeight: 400, borderBottom: '0.5px solid var(--color-border-tertiary)', fontSize: 12, whiteSpace: 'nowrap' }}>{h}</th>
+                  <tr style={{ background: 'var(--color-background-secondary)' }}>
+                    {[
+                      { label: 'Équipe', width: '35%' },
+                      { label: 'Division', width: '18%' },
+                      { label: 'Prix', width: '12%' },
+                      { label: 'Variation', width: '12%' },
+                      { label: 'Pts LNH', width: '10%' },
+                      { label: 'Rang div.', width: '10%' },
+                    ].map(h => (
+                      <th key={h.label} style={{ textAlign: 'left', padding: '10px 12px', color: 'var(--color-text-secondary)', fontWeight: 600, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid var(--color-border-tertiary)', width: h.width }}>
+                        {h.label}
+                      </th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
                   {mktLoading ? (
-                    <tr><td colSpan={8} style={{ textAlign: 'center', padding: 40, color: 'var(--color-text-secondary)' }}>Chargement du marche...</td></tr>
-                  ) : filteredTeams.map(t => {
+                    <tr><td colSpan={6} style={{ textAlign: 'center', padding: 40, color: 'var(--color-text-secondary)' }}>Chargement du marché...</td></tr>
+                  ) : filteredTeams.map((t, idx) => {
                     const ch = t.changePct || 0;
                     const hasChange = t.prevPrice && t.prevPrice !== t.price;
                     const price = t.price || 25;
-                    const held = (pf?.positions || []).find(p => p.team_id === t.id);
+                    const divColors = { Atlantique: '#e8f4fd', Métropolitaine: '#f0e8fd', Centrale: '#fdf4e8', Pacifique: '#e8fdf0', Metropolitaine: '#f0e8fd' };
+                    const divTextColors = { Atlantique: '#1a5276', Métropolitaine: '#6c3483', Centrale: '#7d6608', Pacifique: '#1e8449', Metropolitaine: '#6c3483' };
                     return (
-                      <tr key={t.id} style={{ borderBottom: '0.5px solid var(--color-border-tertiary)', cursor: 'pointer' }}
+                      <tr key={t.id}
+                        style={{ borderBottom: '0.5px solid var(--color-border-tertiary)', cursor: 'pointer', transition: 'background 0.15s' }}
                         onMouseEnter={e => e.currentTarget.style.background = 'var(--color-background-secondary)'}
-                        onMouseLeave={e => e.currentTarget.style.background = ''}>
-                        <td style={{ padding: '8px 8px', whiteSpace: 'nowrap' }}>
-                          <span style={{ width: 24, height: 24, borderRadius: '50%', background: TEAM_COLORS[t.id] || '#888', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 8, fontWeight: 500, color: 'white', verticalAlign: 'middle', marginRight: 8 }}>{t.id}</span>
-                          {t.name}
-                          {t.stats?.clinched && <span style={{ marginLeft: 6, fontSize: 10, padding: '1px 6px', borderRadius: 4, background: '#eafaf1', color: '#1e8449', fontWeight: 500 }}>Qualifie</span>}
+                        onMouseLeave={e => e.currentTarget.style.background = idx % 2 === 0 ? '' : 'rgba(0,0,0,0.01)'}>
+                        {/* Equipe */}
+                        <td style={{ padding: '10px 12px', whiteSpace: 'nowrap' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                            <div style={{ width: 32, height: 32, borderRadius: '50%', background: TEAM_COLORS[t.id] || '#888', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 700, color: 'white', flexShrink: 0, boxShadow: '0 1px 3px rgba(0,0,0,0.2)' }}>{t.id}</div>
+                            <div>
+                              <div style={{ fontWeight: 600, fontSize: 13, color: 'var(--color-text-primary)' }}>
+                                {t.name}
+                                {t.stats?.clinched && <span style={{ marginLeft: 7, fontSize: 10, padding: '2px 7px', borderRadius: 20, background: '#eafaf1', color: '#1e8449', fontWeight: 600, verticalAlign: 'middle' }}>✓ Qualifié</span>}
+                              </div>
+                            </div>
+                          </div>
                         </td>
-                        <td style={{ padding: '8px 8px', color: 'var(--color-text-secondary)', fontSize: 11 }}>{t.division}</td>
-                        <td style={{ padding: '8px 8px', fontWeight: 500 }}>{'$'}{price.toFixed(2)}</td>
-                        <td style={{ padding: '8px 8px' }}>
+                        {/* Division */}
+                        <td style={{ padding: '10px 12px' }}>
+                          <span style={{ fontSize: 11, padding: '3px 8px', borderRadius: 20, background: divColors[t.division] || '#f0f0f0', color: divTextColors[t.division] || '#555', fontWeight: 500, whiteSpace: 'nowrap' }}>
+                            {t.division}
+                          </span>
+                        </td>
+                        {/* Prix */}
+                        <td style={{ padding: '10px 12px', fontWeight: 700, fontSize: 14, color: 'var(--color-text-primary)' }}>
+                          ${price.toFixed(2)}
+                        </td>
+                        {/* Variation */}
+                        <td style={{ padding: '10px 12px' }}>
                           {hasChange ? (
-                            <span style={{ display: 'inline-block', padding: '2px 7px', borderRadius: 6, fontSize: 11, fontWeight: 500, background: ch > 0 ? '#eafaf1' : ch < 0 ? '#fdedec' : 'var(--color-background-secondary)', color: ch > 0 ? '#1e8449' : ch < 0 ? '#922b21' : 'var(--color-text-secondary)' }}>
-                              {ch >= 0 ? '+' : ''}{ch.toFixed(2)}%
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 2, padding: '3px 9px', borderRadius: 20, fontSize: 12, fontWeight: 700, background: ch > 0 ? '#eafaf1' : ch < 0 ? '#fdedec' : 'var(--color-background-secondary)', color: ch > 0 ? '#1e8449' : ch < 0 ? '#922b21' : 'var(--color-text-secondary)' }}>
+                              {ch > 0 ? '▲' : ch < 0 ? '▼' : ''} {ch >= 0 ? '+' : ''}{ch.toFixed(2)}%
                             </span>
-                          ) : <span style={{ fontSize: 11, color: 'var(--color-text-secondary)' }}>-</span>}
+                          ) : (
+                            <span style={{ fontSize: 12, color: 'var(--color-text-secondary)', padding: '3px 6px' }}>—</span>
+                          )}
                         </td>
-                        <td style={{ padding: '8px 8px' }}>{t.stats?.points ?? '-'}</td>
-                        <td style={{ padding: '8px 8px' }}>{t.stats?.division_rank ? '#' + t.stats.division_rank : '-'}</td>
+                        {/* Pts LNH */}
+                        <td style={{ padding: '10px 12px', fontWeight: 500, color: 'var(--color-text-primary)' }}>
+                          {t.stats?.points ?? '—'}
+                        </td>
+                        {/* Rang div */}
+                        <td style={{ padding: '10px 12px' }}>
+                          {t.stats?.division_rank ? (
+                            <span style={{ fontWeight: 700, color: t.stats.division_rank <= 3 ? '#1e8449' : t.stats.division_rank >= 7 ? '#922b21' : 'var(--color-text-secondary)', fontSize: 13 }}>
+                              #{t.stats.division_rank}
+                            </span>
+                          ) : '—'}
+                        </td>
                       </tr>
                     );
                   })}
